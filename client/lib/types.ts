@@ -8,6 +8,7 @@ export interface Plant {
   capacityMW: number
   status: PlantStatus
   nearbyRenewables?: string
+  state: string
 }
 
 export interface Pipeline {
@@ -22,6 +23,7 @@ export interface StorageSite {
   lat: number
   lng: number
   capacityKtons: number
+  state: string
 }
 
 export interface DemandHub {
@@ -30,6 +32,7 @@ export interface DemandHub {
   lat: number
   lng: number
   type: "Industry" | "Urban"
+  state: string
 }
 
 export interface RenewableSite {

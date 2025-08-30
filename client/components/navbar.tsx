@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Menu, X, Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ThemeToggle } from "./theme-provider"
 
 const links = [
@@ -19,6 +19,31 @@ const links = [
 export function Navbar() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    // Add event listener when menu is open
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isMobileMenuOpen])
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [pathname])
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-glass-border shadow-lg shadow-glass-shadow">
@@ -45,12 +70,12 @@ export function Navbar() {
                 )}
                 aria-current={pathname === link.href ? "page" : undefined}
               >
-                <>
+                <div className="relative z-10 flex items-center gap-2">
                   <link.icon className="w-4 h-4" />
                   <span>{link.label}</span>
-                </>
+                </div>
                 {pathname === link.href && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl pointer-events-none" />
                 )}
               </Link>
             </li>
@@ -63,8 +88,12 @@ export function Navbar() {
           
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+            }}
+            className="md:hidden p-2 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors z-50 relative"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -72,8 +101,14 @@ export function Navbar() {
       </nav>
 
       {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-xl border-t border-glass-border">
+      {/* Mobile Navigation */}
+      <div 
+        ref={menuRef} 
+        className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+        } fixed inset-x-0 top-16 z-40`}
+      >
+        <div className="bg-background/95 backdrop-blur-xl border-t border-glass-border">
           <ul className="px-4 py-4 space-y-2">
             {links.map((link) => (
               <li key={link.href}>
@@ -86,19 +121,19 @@ export function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   aria-current={pathname === link.href ? "page" : undefined}
                 >
-                  <>
+                  <div className="relative z-10 flex items-center gap-3">
                     <link.icon className="w-4 h-4" />
                     <span>{link.label}</span>
-                  </>
+                  </div>
                   {pathname === link.href && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl pointer-events-none" />
                   )}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-      )}
+      </div>
     </header>
   )
 }

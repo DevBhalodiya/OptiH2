@@ -76,61 +76,57 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
         onClick={toggleDropdown}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        className="flex items-center gap-2 px-3 py-2 bg-background/95 backdrop-blur-md border border-glass-border rounded-lg shadow-lg hover:bg-background/80 transition-all duration-200 min-w-32 relative z-[1001]"
+        className="flex items-center gap-1 px-2 py-1 bg-primary/10 border border-primary/20 rounded-md hover:bg-primary/20 transition-all duration-200 text-xs font-medium text-primary relative z-[1001]"
       >
-        <div className="w-5 h-5 bg-primary/10 rounded-md flex items-center justify-center">
-          <Layers className="w-3 h-3 text-primary" />
-        </div>
-        <span className="text-sm font-medium text-foreground">Layers</span>
-        <div className="ml-auto">
-          <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-        </div>
+        <Layers className="w-3 h-3" />
+        <span>Layers</span>
+        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Content */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-background/95 backdrop-blur-md border border-glass-border rounded-xl p-3 shadow-xl min-w-64 z-[1002] transition-all duration-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-foreground">Map Layers</h3>
+        <div className="absolute top-full right-0 mt-1 bg-background/95 backdrop-blur-md border border-glass-border rounded-lg p-2 shadow-xl min-w-48 z-[1002] transition-all duration-200">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xs font-semibold text-foreground">Layers</h3>
             <div className="text-xs text-muted-foreground">
               {activeCount}/{totalCount}
             </div>
           </div>
           
-          <div className="space-y-2">
+          <div className="space-y-1">
             {Object.entries(layerConfig).map(([key, config]) => {
               const isActive = layers[key as keyof LayersState]
               return (
                 <button
                   key={key}
                   onClick={(e) => toggleLayer(e, key as keyof LayersState)}
-                  className={`w-full group relative overflow-hidden rounded-lg p-2 transition-all duration-200 ${
+                  className={`w-full group relative overflow-hidden rounded-md p-1.5 transition-all duration-200 ${
                     isActive 
                       ? 'bg-primary/15 border border-primary/30' 
                       : 'bg-background/60 border border-transparent hover:bg-background/80 hover:border-primary/20'
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     {/* Checkbox */}
-                    <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-all duration-200 ${
+                    <div className={`w-3 h-3 rounded-sm border flex items-center justify-center transition-all duration-200 ${
                       isActive 
                         ? 'border-primary bg-primary' 
                         : 'border-muted-foreground/40 group-hover:border-primary/50'
                     }`}>
                       {isActive && (
-                        <svg className="w-2.5 h-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-2 h-2 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}
                     </div>
                     
                     {/* Icon */}
-                    <div className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200 ${
+                    <div className={`w-4 h-4 rounded flex items-center justify-center transition-all duration-200 ${
                       isActive 
                         ? 'bg-primary/20' 
                         : 'bg-muted/40 group-hover:bg-primary/10'
                     }`}>
-                      <config.icon className={`w-3 h-3 transition-all duration-200 ${
+                      <config.icon className={`w-2.5 h-2.5 transition-all duration-200 ${
                         isActive ? 'text-primary' : config.color
                       }`} />
                     </div>
@@ -148,8 +144,8 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
           </div>
           
           {/* Quick Actions */}
-          <div className="mt-3 pt-2 border-t border-glass-border/50">
-            <div className="flex gap-2">
+          <div className="mt-2 pt-2 border-t border-glass-border/50">
+            <div className="flex gap-1">
               <button
                 onClick={() => onChange({
                   plants: true,
@@ -158,9 +154,9 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
                   demand: true,
                   renewables: true
                 })}
-                className="flex-1 px-2 py-1 text-xs bg-primary/10 text-primary rounded-md hover:bg-primary/20 transition-colors"
+                className="flex-1 px-1.5 py-1 text-xs bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors"
               >
-                Select All
+                All
               </button>
               <button
                 onClick={() => onChange({
@@ -170,9 +166,9 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
                   demand: false,
                   renewables: false
                 })}
-                className="flex-1 px-2 py-1 text-xs bg-muted/50 text-muted-foreground rounded-md hover:bg-muted/70 transition-colors"
+                className="flex-1 px-1.5 py-1 text-xs bg-muted/50 text-muted-foreground rounded hover:bg-muted/70 transition-colors"
               >
-                Clear All
+                None
               </button>
             </div>
           </div>

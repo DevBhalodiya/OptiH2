@@ -3,6 +3,7 @@
 import { Navbar } from "@/components/navbar"
 import { DynamicMap } from "@/components/map/dynamic-map"
 import { LayersToggle, type LayersState } from "@/components/map/layers-toggle"
+import { useState } from "react"
 import { 
   MapPin, 
   Zap, 
@@ -18,7 +19,6 @@ import {
   Building2,
   Factory
 } from "lucide-react"
-import { useState } from "react"
 
 export default function MapPage() {
   // State for map layers
@@ -194,40 +194,11 @@ export default function MapPage() {
           <div className="glass-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold">Interactive Indian Infrastructure Map</h2>
-              <div className="flex items-center gap-2">
-                <LayersToggle layers={layers} onChange={setLayers} />
-                <button className="px-4 py-2 bg-green-100 border border-green-200 text-green-600 rounded-lg hover:bg-green-200 transition-colors flex items-center gap-2">
-                  <Info className="w-4 h-4" />
-                  Legend
-                </button>
-              </div>
+              <LayersToggle layers={layers} onChange={setLayers} />
             </div>
             
             <div className="relative">
-              <DynamicMap />
-              
-              {/* Map Overlay Info */}
-              <div className="absolute top-4 left-4 glass-card p-4 rounded-xl max-w-xs">
-                <h4 className="font-semibold mb-2">Map Legend</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    <span>Active Plants</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full" />
-                    <span>Maintenance</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                    <span>Planned</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full" />
-                    <span>Offline</span>
-                  </div>
-                </div>
-              </div>
+              <DynamicMap layers={layers} onLayersChange={setLayers} />
             </div>
           </div>
 

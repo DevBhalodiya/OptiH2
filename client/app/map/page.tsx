@@ -171,7 +171,7 @@ export default function MapPage() {
 
                 <div className="glass-card p-4 rounded-xl bg-accent/5 border border-accent/20">
                   <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
-                  <div className="space-y-2 text-sm">
+                  <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full" />
                       <span>Gujarat Green H2 commissioned</span>
@@ -190,13 +190,13 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* Map Container */}
+          {/* Interactive Indian Infrastructure Map */}
           <div className="glass-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold">Interactive Indian Infrastructure Map</h2>
               <div className="flex items-center gap-2">
                 <LayersToggle layers={layers} onChange={setLayers} />
-                <button className="px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-lg hover:bg-primary/20 transition-colors flex items-center gap-2">
+                <button className="px-4 py-2 bg-green-100 border border-green-200 text-green-600 rounded-lg hover:bg-green-200 transition-colors flex items-center gap-2">
                   <Info className="w-4 h-4" />
                   Legend
                 </button>

@@ -1,79 +1,113 @@
 import { Navbar } from "@/components/navbar"
 import { 
-  Leaf, 
-  Zap, 
-  Globe, 
+  MapPin, 
   Users, 
-  Award, 
   Target, 
-  TrendingUp, 
-  Lightbulb,
-  MapPin,
-  Phone,
-  Mail,
-  Linkedin,
-  Twitter,
-  Github,
+  Award, 
+  Globe, 
+  Leaf,
+  Factory,
+  Train,
+  Car,
+  Building2,
   ArrowRight,
-  CheckCircle
+  Mail,
+  Phone,
+  Clock,
+  CheckCircle,
+  TrendingUp,
+  Zap,
+  BarChart3
 } from "lucide-react"
 
 export default function AboutPage() {
-  // Mock company data
+  // Mock data for Indian company
   const companyStats = [
-    { name: "Years Experience", value: "8+", icon: Award },
-    { name: "Projects Completed", value: "150+", icon: CheckCircle },
-    { name: "Team Members", value: "45+", icon: Users },
-    { name: "Countries Served", value: "12+", icon: Globe }
+    {
+      title: "Indian States Covered",
+      value: "18",
+      icon: MapPin,
+      color: "text-blue-500"
+    },
+    {
+      title: "Team Members",
+      value: "45+",
+      icon: Users,
+      color: "text-green-500"
+    },
+    {
+      title: "Projects Completed",
+      value: "156",
+      icon: Target,
+      color: "text-purple-500"
+    },
+    {
+      title: "Years Experience",
+      value: "8+",
+      icon: Award,
+      color: "text-orange-500"
+    }
   ]
 
   const coreValues = [
     {
-      title: "Sustainability First",
-      description: "Committed to accelerating the transition to clean, renewable energy sources",
-      icon: Leaf
+      title: "Sustainability",
+      description: "Driving the transition to clean energy with innovative hydrogen solutions",
+      icon: Leaf,
+      color: "bg-green-100 text-green-600 border-green-200"
     },
     {
-      title: "Innovation Driven",
-      description: "Leveraging cutting-edge technology to solve complex energy challenges",
-      icon: Lightbulb
-    },
-    {
-      title: "Global Impact",
-      description: "Working towards a sustainable future for generations to come",
-      icon: Globe
+      title: "Innovation",
+      description: "Leveraging cutting-edge AI and machine learning for optimal infrastructure planning",
+      icon: Zap,
+      color: "bg-blue-100 text-blue-600 border-blue-200"
     },
     {
       title: "Excellence",
-      description: "Delivering the highest quality solutions with precision and care",
-      icon: Award
+      description: "Delivering world-class solutions with precision and reliability",
+      icon: Award,
+      color: "bg-amber-100 text-amber-600 border-amber-200"
+    },
+    {
+      title: "Collaboration",
+      description: "Partnering with industry leaders and government for sustainable growth",
+      icon: Users,
+      color: "bg-purple-100 text-purple-600 border-purple-200"
     }
   ]
 
   const teamMembers = [
     {
-      name: "Dr. Sarah Chen",
+      name: "Dr. Rajesh Kumar",
+      role: "Chief Executive Officer",
+      expertise: "Energy Policy & Infrastructure",
+      experience: "15+ years",
+      location: "New Delhi",
+      avatar: "RK"
+    },
+    {
+      name: "Priya Sharma",
       role: "Chief Technology Officer",
-      expertise: "AI & Machine Learning",
-      avatar: "/placeholder-user.jpg"
+      expertise: "AI & Hydrogen Technology",
+      experience: "12+ years",
+      location: "Bangalore",
+      avatar: "PS"
     },
     {
-      name: "Michael Rodriguez",
+      name: "Amit Patel",
       role: "Head of Operations",
-      expertise: "Infrastructure & Logistics",
-      avatar: "/placeholder-user.jpg"
+      expertise: "Industrial Integration",
+      experience: "10+ years",
+      location: "Mumbai",
+      avatar: "AP"
     },
     {
-      name: "Dr. Emily Watson",
-      role: "Lead Scientist",
-      expertise: "Renewable Energy Systems",
-      avatar: "/placeholder-user.jpg"
-    },
-    {
-      name: "David Kim",
-      role: "Director of Engineering",
-      expertise: "Systems Integration",
-      avatar: "/placeholder-user.jpg"
+      name: "Dr. Meera Iyer",
+      role: "Chief Sustainability Officer",
+      expertise: "Environmental Impact",
+      experience: "14+ years",
+      location: "Chennai",
+      avatar: "MI"
     }
   ]
 
@@ -81,27 +115,27 @@ export default function AboutPage() {
     {
       year: "2016",
       title: "Company Founded",
-      description: "Started with a vision to revolutionize hydrogen infrastructure"
+      description: "Established with a mission to revolutionize clean energy infrastructure through hydrogen technology"
     },
     {
       year: "2018",
       title: "First Major Project",
-      description: "Successfully deployed solar-hydrogen plant in California"
+      description: "Successfully implemented hydrogen optimization for Gujarat's industrial sector, reducing costs by 27%"
     },
     {
       year: "2020",
       title: "AI Integration",
-      description: "Launched AI-powered optimization platform"
+      description: "Integrated machine learning algorithms to enhance optimization accuracy by 40%"
     },
     {
       year: "2022",
-      title: "Global Expansion",
-      description: "Extended operations to 12 countries worldwide"
+      title: "National Expansion",
+      description: "Expanded operations to 18 states and secured partnerships with 5 major energy corporations"
     },
     {
       year: "2024",
-      title: "Industry Leader",
-      description: "Recognized as top hydrogen infrastructure company"
+      title: "Global Recognition",
+      description: "Awarded 'Most Innovative Energy Solution' at the Global Clean Energy Summit"
     }
   ]
 
@@ -113,28 +147,26 @@ export default function AboutPage() {
           {/* Header */}
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About <span className="gradient-text">OptiH2</span>
+              About <span className="gradient-text">OptiH2 India</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Pioneering the future of sustainable energy through innovative hydrogen infrastructure 
-              solutions and cutting-edge optimization technology
+              Leading India's transition to sustainable energy through advanced hydrogen infrastructure 
+              optimization and AI-powered solutions
             </p>
           </div>
 
-          {/* Company Stats */}
-          <section className="mb-16">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {companyStats.map((stat, index) => (
-                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
-                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
-                  <p className="text-muted-foreground">{stat.name}</p>
+          {/* Company Statistics */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {companyStats.map((stat, index) => (
+              <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
                 </div>
-              ))}
-            </div>
-          </section>
+                <div className="text-3xl font-bold mb-2">{stat.value}</div>
+                <div className="text-muted-foreground">{stat.title}</div>
+              </div>
+            ))}
+          </div>
 
           {/* Mission & Vision */}
           <section className="mb-16">
@@ -164,138 +196,232 @@ export default function AboutPage() {
           </section>
 
           {/* Core Values */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Core Values</h2>
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Our Core Values</h2>
               <p className="text-xl text-muted-foreground">
-                The principles that guide everything we do
+                Guided by Indian principles and global best practices
               </p>
             </div>
-            
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {coreValues.map((value, index) => (
-                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300 group">
-                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                    <value.icon className="w-8 h-8 text-primary" />
+                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border ${value.color}`}>
+                    <value.icon className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{value.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{value.description}</p>
+                  <h3 className="text-lg font-bold mb-2">{value.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          {/* Company Timeline */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Our Journey</h2>
-              <p className="text-xl text-muted-foreground">
-                Key milestones in our company's growth and development
+          {/* Performance Metrics Graph */}
+          <div className="glass-card p-8 rounded-2xl mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Our Impact</h2>
+              <p className="text-xl text-muted-foreground mb-8">
+                Transforming India's energy landscape through hydrogen innovation
               </p>
             </div>
             
-            <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-1/2 transform -translate-x-px w-0.5 h-full bg-primary/20"></div>
-              
-              <div className="space-y-12">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className={`relative flex items-center ${
-                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                  }`}>
-                    {/* Timeline Dot */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
-                    
-                    {/* Content */}
-                    <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                      <div className="glass-card p-6 rounded-2xl">
-                        <div className="text-2xl font-bold text-primary mb-2">{milestone.year}</div>
-                        <h3 className="text-xl font-bold mb-2">{milestone.title}</h3>
-                        <p className="text-muted-foreground">{milestone.description}</p>
-                      </div>
-                    </div>
+            <div className="h-80 w-full bg-gradient-to-b from-primary/5 to-transparent rounded-xl p-6">
+              <div className="h-full flex items-end gap-8">
+                {[
+                  { label: '2020', value: 35, color: 'bg-blue-500' },
+                  { label: '2021', value: 52, color: 'bg-green-500' },
+                  { label: '2022', value: 78, color: 'bg-purple-500' },
+                  { label: '2023', value: 65, color: 'bg-amber-500' },
+                  { label: '2024', value: 95, color: 'bg-teal-500' },
+                ].map((item, index) => (
+                  <div key={index} className="flex-1 flex flex-col items-center">
+                    <div 
+                      className={`w-full ${item.color} rounded-t-md transition-all duration-500`}
+                      style={{ height: `${item.value}%` }}
+                    ></div>
+                    <div className="mt-2 text-sm font-medium">{item.label}</div>
+                    <div className="text-xs text-muted-foreground">{item.value}%</div>
                   </div>
                 ))}
               </div>
+              <div className="mt-6 text-center text-sm text-muted-foreground">
+                Year-over-year growth in hydrogen infrastructure optimization efficiency
+              </div>
             </div>
-          </section>
+          </div>
 
-          {/* Team Section */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Leadership Team</h2>
+          {/* Company Timeline */}
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Our Journey</h2>
               <p className="text-xl text-muted-foreground">
-                Meet the experts driving innovation and growth
+                Key milestones in advancing hydrogen infrastructure
               </p>
             </div>
-            
+            <div className="glass-card p-8 rounded-2xl">
+              <div className="relative">
+                {/* Timeline Line */}
+                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/20"></div>
+                
+                <div className="space-y-8">
+                  {milestones.map((milestone, index) => (
+                    <div key={index} className="relative flex items-start gap-6">
+                      {/* Timeline Dot */}
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-4 border-background relative z-10">
+                        <div className="w-4 h-4 bg-primary rounded-full"></div>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1 pt-2">
+                        <div className="text-2xl font-bold text-primary mb-2">{milestone.year}</div>
+                        <h3 className="text-xl font-bold mb-2">{milestone.title}</h3>
+                        <p className="text-muted-foreground leading-relaxed">{milestone.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Achievements */}
+          <div className="glass-card p-8 rounded-2xl mb-12">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {teamMembers.map((member, index) => (
-                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
-                  <div className="w-20 h-20 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="w-10 h-10 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-1">{member.name}</h3>
-                  <p className="text-primary font-medium mb-2">{member.role}</p>
-                  <p className="text-sm text-muted-foreground">{member.expertise}</p>
+              {[
+                { value: "45+", label: "Industry Experts", description: "Dedicated team members" },
+                { value: "98%", label: "Client Satisfaction", description: "Across all projects" },
+                { value: "250+", label: "Projects Completed", description: "In 18 states" },
+                { value: "$1.2B", label: "Cost Savings", description: "For our clients" },
+              ].map((item, index) => (
+                <div key={index} className="text-center p-6 rounded-xl bg-background/50">
+                  <div className="text-3xl font-bold text-primary mb-2">{item.value}</div>
+                  <div className="text-lg font-semibold mb-1">{item.label}</div>
+                  <div className="text-sm text-muted-foreground">{item.description}</div>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+
+          {/* Leadership Team */}
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Our Leadership Team</h2>
+              <p className="text-xl text-muted-foreground">
+                Visionary leaders driving the future of clean energy
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {teamMembers.map((member, index) => (
+                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
+                  <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold text-primary">
+                    {member.avatar}
+                  </div>
+                  <h3 className="text-lg font-bold mb-1">{member.name}</h3>
+                  <div className="text-primary font-medium mb-2">{member.role}</div>
+                  <p className="text-sm text-muted-foreground mb-2">{member.expertise}</p>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div>{member.experience} experience</div>
+                    <div>{member.location}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Contact Section */}
-          <section className="mb-16">
-            <div className="glass-card p-8 rounded-2xl">
-              <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
-                <p className="text-xl text-muted-foreground">
-                  Ready to start your hydrogen infrastructure journey?
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <span>123 Innovation Drive, Tech City, TC 12345</span>
+          <div className="glass-card p-8 rounded-2xl">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
+              <p className="text-xl text-muted-foreground">
+                Ready to transform India's energy future? Let's discuss your hydrogen infrastructure needs.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Contact Information */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-primary" />
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-primary" />
-                    <span>+1 (555) 123-4567</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-primary" />
-                    <span>info@optih2.com</span>
+                  <div>
+                    <h3 className="font-semibold">Head Office</h3>
+                    <p className="text-muted-foreground">New Delhi, India</p>
                   </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Follow Us</h3>
-                  <div className="flex gap-4">
-                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
-                      <Twitter className="w-5 h-5" />
-                    </a>
-                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
-                      <Github className="w-5 h-5" />
-                    </a>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Mail className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Email</h3>
+                    <p className="text-muted-foreground">info@optih2india.com</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Phone</h3>
+                    <p className="text-muted-foreground">+91 11 2345 6789</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Business Hours</h3>
+                    <p className="text-muted-foreground">Mon - Fri: 9:00 AM - 6:00 PM IST</p>
                   </div>
                 </div>
               </div>
-              
-              <div className="text-center mt-8">
+
+              {/* Quick Actions */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+                <a
+                  href="/map"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all group"
+                >
+                  <MapPin className="w-5 h-5 text-primary" />
+                  <div>
+                    <div className="font-medium">Explore Indian Infrastructure</div>
+                    <div className="text-sm text-muted-foreground">View our interactive map</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform ml-auto" />
+                </a>
+                
                 <a
                   href="/optimize"
-                  className="glass-button px-8 py-4 rounded-2xl text-lg font-semibold inline-flex items-center gap-3 hover:scale-105 transition-transform"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-all group"
                 >
-                  Start Your Project
-                  <ArrowRight className="w-5 h-5" />
+                  <Zap className="w-5 h-5 text-accent" />
+                  <div>
+                    <div className="font-medium">Run Optimization</div>
+                    <div className="text-sm text-muted-foreground">Optimize your network</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform ml-auto" />
+                </a>
+                
+                <a
+                  href="/reports"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-green-100 border border-green-200 hover:bg-green-200 transition-all group"
+                >
+                  <BarChart3 className="w-5 h-5 text-green-600" />
+                  <div>
+                    <div className="font-medium">Generate Reports</div>
+                    <div className="text-sm text-muted-foreground">Create comprehensive reports</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-green-600 group-hover:translate-x-1 transition-transform ml-auto" />
                 </a>
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </main>
     </>

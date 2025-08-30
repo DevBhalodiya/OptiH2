@@ -26,7 +26,7 @@ export function EarthBackground() {
       0.1,
       1000
     )
-    camera.position.set(3, 0, 4)
+    camera.position.set(5, 0, 8)
     cameraRef.current = camera
 
     // Renderer setup
@@ -101,7 +101,7 @@ export function EarthBackground() {
 
     // Realistic starfield with actual star positions
     const starGeometry = new THREE.BufferGeometry()
-    const starCount = 10000
+    const starCount = 25000
     const starPositions = new Float32Array(starCount * 3)
     const starSizes = new Float32Array(starCount)
     const starColors = new Float32Array(starCount * 3)
@@ -111,15 +111,15 @@ export function EarthBackground() {
       const phi = Math.acos(-1 + (2 * Math.random()))
       const theta = Math.sqrt(2 * Math.PI) * Math.random()
       
-      const x = 2000 * Math.cos(theta) * Math.sin(phi)
-      const y = 2000 * Math.sin(theta) * Math.sin(phi)
-      const z = 2000 * Math.cos(phi)
+      const x = 3000 * Math.cos(theta) * Math.sin(phi)
+      const y = 3000 * Math.sin(theta) * Math.sin(phi)
+      const z = 3000 * Math.cos(phi)
       
       starPositions[i] = x
       starPositions[i + 1] = y
       starPositions[i + 2] = z
       
-      starSizes[i / 3] = Math.random() * 2 + 0.5
+      starSizes[i / 3] = Math.random() * 3 + 0.5
       
       // Vary star colors slightly for realism
       const colorVariation = Math.random() * 0.3 + 0.7
@@ -163,13 +163,15 @@ export function EarthBackground() {
       time += 0.01
 
       if (earthGroup) {
-        // Realistic Earth rotation (one rotation per day)
-        earthGroup.rotation.y += 0.002
+        // Realistic Earth rotation (faster rotation)
+        earthGroup.rotation.y += 0.008
         earthGroup.rotation.x = 0.4 // Earth's axial tilt
       }
 
       if (stars) {
-        stars.rotation.y += 0.0001
+        stars.rotation.y += 0.0008
+        stars.rotation.x += 0.0003
+        stars.rotation.z += 0.0002
       }
 
       // Animate cloud texture for realistic cloud movement
@@ -192,7 +194,7 @@ export function EarthBackground() {
 
     // Scroll-based Earth movement
     const handleScroll = () => {
-      if (!cameraRef.current) return
+      if (!cameraRef.current || !earthRef.current) return
       
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
@@ -213,15 +215,85 @@ export function EarthBackground() {
       
       cameraRef.current.position.x = currentX
       cameraRef.current.position.z = currentZ
+      
+      // Scale earth based on scroll progress (smaller at center)
+      const startScale = 1.0
+      const endScale = 0.6
+      const currentScale = startScale + (endScale - startScale) * scrollProgress
+      
+      earthRef.current.scale.set(currentScale, currentScale, currentScale)
     }
 
+    // Reset camera position when component mounts
+    const initializePage = () => {
+      // Reset camera to starting position
+      if (cameraRef.current) {
+        cameraRef.current.position.x = 3
+        cameraRef.current.position.z = 4
+      }
+      
+      // Reset earth scale to starting size
+      if (earthRef.current) {
+        earthRef.current.scale.set(1.0, 1.0, 1.0)
+      }
+      
+      // Trigger scroll handler immediately to set correct position based on current scroll
+      handleScroll()
+    }
+
+    // Handle page visibility changes (when user returns to tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // User returned to the page, ensure scroll effect is working
+        setTimeout(() => {
+          handleScroll()
+        }, 50)
+      }
+    }
+
+    // Handle window focus (when user returns to window)
+    const handleWindowFocus = () => {
+      // User returned to the window, ensure scroll effect is working
+      setTimeout(() => {
+        handleScroll()
+      }, 50)
+    }
+
+    // Handle route changes (for Next.js)
+    const handleRouteChange = () => {
+      // Reset camera position when route changes
+      setTimeout(() => {
+        if (cameraRef.current) {
+          cameraRef.current.position.x = 3
+          cameraRef.current.position.z = 4
+        }
+        handleScroll()
+      }, 100)
+    }
+
+    // Initialize page state
+    initializePage()
+
+    // Add event listeners
     window.addEventListener('resize', handleResize)
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', handleWindowFocus)
+    
+    // Listen for route changes (Next.js)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', handleRouteChange)
+    }
 
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleWindowFocus)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', handleRouteChange)
+      }
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement)
       }

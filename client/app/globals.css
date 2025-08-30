@@ -54,11 +54,11 @@
 
 /* Glass Card Effect */
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 /* Smooth Scrolling */
@@ -66,24 +66,50 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar */
+/* Completely hide scrollbar and remove all scrollbar effects */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  display: none;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
-  border-radius: 4px;
+  display: none;
+  background: transparent !important;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+  display: none;
+  background: transparent !important;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-foreground);
+  display: none;
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+  background: transparent !important;
+}
+
+/* Firefox and IE scrollbar */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* Remove any potential scrollbar shadows */
+html, body {
+  overflow-x: hidden;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* Ensure no scrollbar space is reserved */
+html {
+  scrollbar-gutter: stable;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -229,17 +255,31 @@ html {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* Remove any potential scrollbar shadows */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
   }
   body {
     @apply bg-background text-foreground;
     background: linear-gradient(135deg, var(--background) 0%, oklch(0.95 0.01 250) 100%);
     min-height: 100vh;
+    /* Prevent horizontal overflow */
+    overflow-x: hidden;
+    /* Remove scrollbar completely */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  
+  /* Remove any potential scrollbar corner shadows */
+  html {
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-glass-border shadow-lg shadow-glass-shadow;
+    @apply bg-card/50 backdrop-blur-xl border border-glass-border shadow-sm shadow-glass-shadow;
   }
   
   .glass-button {
@@ -271,19 +311,4 @@ html {
 
 
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-primary/20 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary/30;
-}
+/* Remove duplicate scrollbar styles - using the ones above */

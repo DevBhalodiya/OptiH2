@@ -49,65 +49,36 @@ export default function AboutPage() {
     }
   ]
 
-  const coreValues = [
-    {
-      title: "Sustainability",
-      description: "Driving the transition to clean energy with innovative hydrogen solutions",
-      icon: Leaf,
-      color: "bg-green-100 text-green-600 border-green-200"
-    },
-    {
-      title: "Innovation",
-      description: "Leveraging cutting-edge AI and machine learning for optimal infrastructure planning",
-      icon: Zap,
-      color: "bg-blue-100 text-blue-600 border-blue-200"
-    },
-    {
-      title: "Excellence",
-      description: "Delivering world-class solutions with precision and reliability",
-      icon: Award,
-      color: "bg-amber-100 text-amber-600 border-amber-200"
-    },
-    {
-      title: "Collaboration",
-      description: "Partnering with industry leaders and government for sustainable growth",
-      icon: Users,
-      color: "bg-purple-100 text-purple-600 border-purple-200"
-    }
-  ]
+
 
   const teamMembers = [
     {
-      name: "Dr. Rajesh Kumar",
-      role: "Chief Executive Officer",
-      expertise: "Energy Policy & Infrastructure",
-      experience: "15+ years",
-      location: "New Delhi",
-      avatar: "RK"
+      name: "Darshit Paghdar",
+      role: "Frontend Developer",
+      expertise: "React, Next.js, TypeScript",
+      location: "Gujarat, India",
+      avatar: "DP"
     },
     {
-      name: "Priya Sharma",
-      role: "Chief Technology Officer",
-      expertise: "AI & Hydrogen Technology",
-      experience: "12+ years",
-      location: "Bangalore",
-      avatar: "PS"
+      name: "Chirag Marvaniya",
+      role: "Frontend Developer",
+      expertise: "React, Next.js, UI/UX Design",
+      location: "Gujarat, India",
+      avatar: "CM"
     },
     {
-      name: "Amit Patel",
-      role: "Head of Operations",
-      expertise: "Industrial Integration",
-      experience: "10+ years",
-      location: "Mumbai",
-      avatar: "AP"
+      name: "Yash Bhalodiya",
+      role: "Backend Developer",
+      expertise: "Node.js, Express, MongoDB",
+      location: "Gujarat, India",
+      avatar: "YB"
     },
     {
-      name: "Dr. Meera Iyer",
-      role: "Chief Sustainability Officer",
-      expertise: "Environmental Impact",
-      experience: "14+ years",
-      location: "Chennai",
-      avatar: "MI"
+      name: "Dev Bhalodiya",
+      role: "Backend Developer",
+      expertise: "Node.js, Python, Database Design",
+      location: "Gujarat, India",
+      avatar: "DB"
     }
   ]
 
@@ -195,26 +166,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Core Values */}
-          <div className="mb-12">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Our Core Values</h2>
-              <p className="text-xl text-muted-foreground">
-                Guided by Indian principles and global best practices
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {coreValues.map((value, index) => (
-                <div key={index} className="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300">
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border ${value.color}`}>
-                    <value.icon className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+
 
           {/* Performance Metrics Graph */}
           <div className="glass-card p-8 rounded-2xl mb-12">
@@ -284,30 +236,14 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Key Achievements */}
-          <div className="glass-card p-8 rounded-2xl mb-12">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { value: "45+", label: "Industry Experts", description: "Dedicated team members" },
-                { value: "98%", label: "Client Satisfaction", description: "Across all projects" },
-                { value: "250+", label: "Projects Completed", description: "In 18 states" },
-                { value: "$1.2B", label: "Cost Savings", description: "For our clients" },
-              ].map((item, index) => (
-                <div key={index} className="text-center p-6 rounded-xl bg-background/50">
-                  <div className="text-3xl font-bold text-primary mb-2">{item.value}</div>
-                  <div className="text-lg font-semibold mb-1">{item.label}</div>
-                  <div className="text-sm text-muted-foreground">{item.description}</div>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Leadership Team */}
+
+          {/* Development Team */}
           <div className="mb-12">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Our Leadership Team</h2>
+              <h2 className="text-3xl font-bold mb-4">Our Development Team</h2>
               <p className="text-xl text-muted-foreground">
-                Visionary leaders driving the future of clean energy
+                Skilled developers building innovative hydrogen infrastructure solutions
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -316,13 +252,12 @@ export default function AboutPage() {
                   <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold text-primary">
                     {member.avatar}
                   </div>
-                  <h3 className="text-lg font-bold mb-1">{member.name}</h3>
-                  <div className="text-primary font-medium mb-2">{member.role}</div>
-                  <p className="text-sm text-muted-foreground mb-2">{member.expertise}</p>
-                  <div className="text-xs text-muted-foreground space-y-1">
-                    <div>{member.experience} experience</div>
-                    <div>{member.location}</div>
-                  </div>
+                                     <h3 className="text-lg font-bold mb-1">{member.name}</h3>
+                   <div className="text-primary font-medium mb-2">{member.role}</div>
+                   <p className="text-sm text-muted-foreground mb-2">{member.expertise}</p>
+                   <div className="text-xs text-muted-foreground">
+                     <div>{member.location}</div>
+                   </div>
                 </div>
               ))}
             </div>

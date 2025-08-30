@@ -30,6 +30,9 @@ export default function MapPage() {
     renewables: true
   })
 
+  // State for selected Indian states
+  const [selectedStates, setSelectedStates] = useState<string[]>([])
+
   // Mock data for Indian map filters
   const plantTypes = [
     { id: 'solar', name: 'Solar Power', icon: Sun, count: 28, color: 'text-yellow-500' },
@@ -131,19 +134,33 @@ export default function MapPage() {
                 <div>
                   <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Indian States
+                    Indian States {selectedStates.length > 0 && `(${selectedStates.length} selected)`}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {indianStates.slice(0, 8).map((state) => (
                       <button
                         key={state}
-                        className="px-2 py-1 rounded-lg bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30 transition-all text-xs"
+                        onClick={() => {
+                          if (selectedStates.includes(state)) {
+                            setSelectedStates(selectedStates.filter(s => s !== state))
+                          } else {
+                            setSelectedStates([...selectedStates, state])
+                          }
+                        }}
+                        className={`px-2 py-1 rounded-lg border transition-all text-xs ${
+                          selectedStates.includes(state)
+                            ? 'bg-primary/20 border-primary/40 text-primary'
+                            : 'bg-background/50 border-glass-border hover:bg-primary/10 hover:border-primary/30'
+                        }`}
                       >
                         {state}
                       </button>
                     ))}
-                    <button className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs">
-                      +{indianStates.length - 8} more
+                    <button 
+                      onClick={() => setSelectedStates([])}
+                      className="px-2 py-1 rounded-lg bg-muted/50 border border-muted/30 hover:bg-muted/70 transition-all text-xs"
+                    >
+                      Clear All
                     </button>
                   </div>
                 </div>
@@ -198,7 +215,7 @@ export default function MapPage() {
             </div>
             
             <div className="relative">
-              <DynamicMap layers={layers} onLayersChange={setLayers} />
+              <DynamicMap layers={layers} onLayersChange={setLayers} selectedStates={selectedStates} />
             </div>
           </div>
 

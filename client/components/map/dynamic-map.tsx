@@ -17,11 +17,13 @@ const LeafletMap = dynamic(() => import("./leaflet-map").then((mod) => ({ defaul
 export function DynamicMap({ 
   showZones = false, 
   layers, 
-  onLayersChange 
+  onLayersChange,
+  selectedStates = []
 }: { 
   showZones?: boolean
   layers?: LayersState
   onLayersChange?: (layers: LayersState) => void
+  selectedStates?: string[]
 }) {
   const [isMounted, setIsMounted] = useState(false)
   
@@ -37,5 +39,5 @@ export function DynamicMap({
     )
   }
   
-  return <LeafletMap showZones={showZones} layers={layers} onLayersChange={onLayersChange} />
+  return <LeafletMap showZones={showZones} layers={layers} onLayersChange={onLayersChange} selectedStates={selectedStates} />
 }

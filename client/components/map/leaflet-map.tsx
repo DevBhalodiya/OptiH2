@@ -38,10 +38,14 @@ const renewableIcon = createCustomIcon('#10b981') // Emerald
 
 export function LeafletMap({ 
   showZones = false, 
-  selectedStates = [] 
+  selectedStates = [],
+  layers: externalLayers,
+  onLayersChange
 }: { 
   showZones?: boolean
   selectedStates?: string[]
+  layers?: LayersState
+  onLayersChange?: (layers: LayersState) => void
 }) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
@@ -49,15 +53,19 @@ export function LeafletMap({
   const polylinesRef = useRef<L.Polyline[]>([])
   const circlesRef = useRef<L.Circle[]>([])
   
-  const [layers, setLayers] = useState<LayersState>({
+  const [internalLayers, setInternalLayers] = useState<LayersState>({
     plants: true,
     pipelines: true,
     storage: true,
     demand: true,
     renewables: true,
   })
+  
+  // Use external layers if provided, otherwise use internal state
+  const layers = externalLayers || internalLayers
+  const setLayers = onLayersChange || setInternalLayers
 
-        // Initialize map
+  // Initialize map
   useEffect(() => {
     if (!mapContainerRef.current) return
 
@@ -185,12 +193,13 @@ export function LeafletMap({
 
     // Add renewables
     if (layers.renewables) {
-      sampleRenewables.forEach((renewable) => {
+      sampleRenewables.filter(filterByState).forEach((renewable) => {
         const marker = L.marker([renewable.lat, renewable.lng], { icon: renewableIcon })
           .bindPopup(`
             <div>
               <div style="font-weight: 600">${renewable.name}</div>
               <div>Type: ${renewable.type}</div>
+              <div>State: ${renewable.state}</div>
             </div>
           `)
           .addTo(mapRef.current!)
@@ -209,27 +218,18 @@ export function LeafletMap({
         circlesRef.current.push(circle)
       })
     }
-  }, [layers, showZones])
+  }, [layers, showZones, selectedStates])
 
   return (
     <div className="relative h-[70vh] w-full rounded-2xl border bg-gray-50">
       <div ref={mapContainerRef} className="h-full w-full rounded-2xl" style={{ minHeight: '500px' }} />
       
-      {/* Fallback if map doesn't load */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-2xl" style={{ display: 'none' }}>
-        <div className="text-center">
-          <div className="text-lg font-semibold text-gray-600 mb-2">Map Loading...</div>
-          <div className="text-sm text-gray-500">Please wait while the map initializes</div>
-        </div>
-      </div>
-      
-      <div className="absolute left-3 top-3 z-[1000]">
-        <LayersToggle layers={layers} onChange={setLayers} />
-      </div>
-      
-      {/* Legend */}
+      {/* Legend and Layers Controls */}
       <div className="absolute bottom-3 right-3 bg-background/95 backdrop-blur-md border border-glass-border rounded-lg p-3 shadow-lg z-[1000]">
-        <div className="text-xs font-semibold text-foreground mb-2">Legend</div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-xs font-semibold text-foreground">Legend</div>
+          <LayersToggle layers={layers} onChange={setLayers} />
+        </div>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-500 border border-white"></div>

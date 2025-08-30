@@ -31,7 +31,7 @@ export interface DemandHub {
   name: string
   lat: number
   lng: number
-  type: "Industry" | "Urban"
+  type: "Industry" | "Urban" | "Port"
   state: string
 }
 

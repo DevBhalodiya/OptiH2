@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info } from "lucide-react"
+import { Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info, LogIn, UserPlus } from "lucide-react"
 
 const links = [
   { href: "/", label: "Home", icon: Home },
@@ -47,6 +47,27 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          
+          {/* Auth Buttons */}
+          <div className="flex items-center gap-2 ml-4 pl-4 border-l border-white/20">
+            <Link
+              href="/login"
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition-colors",
+                pathname === "/login" && "bg-white/20 text-white shadow-lg"
+              )}
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Login</span>
+            </Link>
+            <Link
+              href="/signup"
+              className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition-colors border border-white/20"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Sign Up</span>
+            </Link>
+          </div>
         </ul>
 
         {/* Mobile Navigation - Simple */}
@@ -67,6 +88,27 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            
+            {/* Mobile Auth Buttons */}
+            <div className="flex items-center gap-1 ml-2 pl-2 border-l border-white/20">
+              <Link
+                href="/login"
+                className={cn(
+                  "flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-white hover:bg-white/10 transition-colors",
+                  pathname === "/login" && "bg-white/20 text-white"
+                )}
+              >
+                <LogIn className="w-3 h-3" />
+                <span className="hidden sm:inline">Login</span>
+              </Link>
+              <Link
+                href="/signup"
+                className="flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium bg-white/10 text-white hover:bg-white/20 transition-colors border border-white/20"
+              >
+                <UserPlus className="w-3 h-3" />
+                <span className="hidden sm:inline">Sign Up</span>
+              </Link>
+            </div>
           </ul>
         </div>
       </nav>

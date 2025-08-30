@@ -1,7 +1,7 @@
 "use client"
 
 import { Navbar } from "@/components/navbar"
-import { MapView } from "@/components/map/map-view"
+import { DynamicMap } from "@/components/map/dynamic-map"
 import { LayersToggle, type LayersState } from "@/components/map/layers-toggle"
 import { 
   MapPin, 
@@ -204,7 +204,7 @@ export default function MapPage() {
             </div>
             
             <div className="relative">
-              <MapView />
+              <DynamicMap />
               
               {/* Map Overlay Info */}
               <div className="absolute top-4 left-4 glass-card p-4 rounded-xl max-w-xs">

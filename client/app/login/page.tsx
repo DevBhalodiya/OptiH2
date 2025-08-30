@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Leaf } from "lucide-react";
@@ -16,7 +18,10 @@ const GoogleIcon = () => (
 );
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login, loginWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -56,18 +61,39 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle login logic here
-      console.log('Login attempt:', formData);
+      setIsLoading(true);
+      try {
+        const success = await login(formData.email, formData.password);
+        if (success) {
+          router.push('/');
+        } else {
+          setErrors({ general: 'Login failed. Please try again.' });
+        }
+      } catch (error) {
+        setErrors({ general: 'An error occurred. Please try again.' });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Google OAuth login logic
-    console.log('Google login initiated');
-    window.location.href = '/api/auth/google';
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const success = await loginWithGoogle();
+      if (success) {
+        router.push('/');
+      } else {
+        setErrors({ general: 'Google login failed. Please try again.' });
+      }
+    } catch (error) {
+      setErrors({ general: 'An error occurred. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -165,11 +191,16 @@ export default function LoginPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 hover:scale-105 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
-                <ArrowRight className="w-4 h-4" />
+                {isLoading ? 'Signing In...' : 'Sign In'}
+                {!isLoading && <ArrowRight className="w-4 h-4" />}
               </button>
+              
+              {errors.general && (
+                <p className="text-red-400 text-sm text-center">{errors.general}</p>
+              )}
             </form>
 
             {/* Divider */}
@@ -183,10 +214,11 @@ export default function LoginPage() {
             <div className="space-y-3">
               <button 
                 onClick={handleGoogleLogin}
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-3"
+                disabled={isLoading}
+                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <GoogleIcon />
-                Continue with Google
+                {isLoading ? 'Signing In...' : 'Continue with Google'}
               </button>
             </div>
 

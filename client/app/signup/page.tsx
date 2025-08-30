@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Leaf, Check, X } from "lucide-react";
@@ -16,8 +18,11 @@ const GoogleIcon = () => (
 );
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { signup, loginWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -100,18 +105,39 @@ export default function SignupPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle signup logic here
-      console.log('Signup attempt:', formData);
+      setIsLoading(true);
+      try {
+        const success = await signup(formData);
+        if (success) {
+          router.push('/');
+        } else {
+          setErrors({ general: 'Signup failed. Please try again.' });
+        }
+      } catch (error) {
+        setErrors({ general: 'An error occurred. Please try again.' });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleGoogleSignup = () => {
-    // Google OAuth signup logic
-    console.log('Google signup initiated');
-    window.location.href = '/api/auth/google';
+  const handleGoogleSignup = async () => {
+    setIsLoading(true);
+    try {
+      const success = await loginWithGoogle();
+      if (success) {
+        router.push('/');
+      } else {
+        setErrors({ general: 'Google signup failed. Please try again.' });
+      }
+    } catch (error) {
+      setErrors({ general: 'An error occurred. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -324,11 +350,16 @@ export default function SignupPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 hover:scale-105 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create Account
-                <ArrowRight className="w-4 h-4" />
+                {isLoading ? 'Creating Account...' : 'Create Account'}
+                {!isLoading && <ArrowRight className="w-4 h-4" />}
               </button>
+              
+              {errors.general && (
+                <p className="text-red-400 text-sm text-center">{errors.general}</p>
+              )}
             </form>
 
             {/* Divider */}
@@ -342,10 +373,11 @@ export default function SignupPage() {
             <div className="space-y-3">
               <button 
                 onClick={handleGoogleSignup}
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-3"
+                disabled={isLoading}
+                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <GoogleIcon />
-                Continue with Google
+                {isLoading ? 'Creating Account...' : 'Continue with Google'}
               </button>
             </div>
 

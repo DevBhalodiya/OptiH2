@@ -23,7 +23,7 @@ import {
   Info,
   Loader2
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 export default function ReportsPage() {
   // Real data state
@@ -44,19 +44,40 @@ export default function ReportsPage() {
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedState, setSelectedState] = useState('All States')
+  const [selectedStatus, setSelectedStatus] = useState('All Status')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
-  // Fetch real data on component mount
+  // Report functionality states
+  const [previewTemplate, setPreviewTemplate] = useState<any>(null)
+  const [showPreviewModal, setShowPreviewModal] = useState(false)
+  const [generatingReport, setGeneratingReport] = useState<number | null>(null)
+  const [generatedReports, setGeneratedReports] = useState<{[key: number]: string}>({})
+
+  // Ref to track if data has been fetched
+  const hasFetchedData = useRef(false)
+
+  // Fetch real data on component mount only once
   useEffect(() => {
-    fetchRealData()
-  }, [])
+    // Only fetch if we haven't fetched data before and don't have data already
+    if (!hasFetchedData.current && (realData.plants.length === 0 && realData.pipelines.length === 0 && realData.renewables.length === 0 && realData.demand.length === 0)) {
+      hasFetchedData.current = true
+      fetchRealData()
+    }
+  }, []) // Empty dependency array - runs only once on mount
 
   const fetchRealData = async () => {
+    // Prevent multiple simultaneous API calls
+    if (isLoadingData) {
+      console.log('Data fetch already in progress, skipping...')
+      return
+    }
+    
     setIsLoadingData(true)
     setDataError(null)
     
     try {
+      console.log('Fetching real data...')
       const response = await fetch('/api/real-data')
       if (!response.ok) {
         throw new Error('Failed to fetch real data')
@@ -64,7 +85,9 @@ export default function ReportsPage() {
       
       const result = await response.json()
       if (result.success) {
+        console.log('Real data fetched successfully:', result.data)
         setRealData(result.data)
+        hasFetchedData.current = true
       } else {
         throw new Error(result.error || 'Failed to fetch data')
       }
@@ -214,6 +237,11 @@ export default function ReportsPage() {
       return false
     }
     
+    // Status filter
+    if (selectedStatus !== 'All Status' && template.status !== selectedStatus.toLowerCase()) {
+      return false
+    }
+    
     // Search filter
     if (searchQuery && !template.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
         !template.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -308,6 +336,7 @@ export default function ReportsPage() {
   const clearFilters = () => {
     setSelectedCategory('All')
     setSelectedState('All States')
+    setSelectedStatus('All Status')
     setSearchQuery('')
   }
 
@@ -316,8 +345,94 @@ export default function ReportsPage() {
     let count = 0
     if (selectedCategory !== 'All') count++
     if (selectedState !== 'All States') count++
+    if (selectedStatus !== 'All Status') count++
     if (searchQuery) count++
     return count
+  }
+
+  // Handle template preview
+  const handlePreview = (template: any) => {
+    setPreviewTemplate(template)
+    setShowPreviewModal(true)
+  }
+
+  // Handle report generation
+  const handleGenerateReport = async (template: any) => {
+    // If report already exists, download it
+    if (generatedReports[template.id]) {
+      downloadReport(template, generatedReports[template.id])
+      return
+    }
+
+    setGeneratingReport(template.id)
+    
+    try {
+      // Simulate report generation process
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      // Generate a unique report ID
+      const reportId = `REP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      
+      // Add to generated reports
+      setGeneratedReports(prev => ({
+        ...prev,
+        [template.id]: reportId
+      }))
+      
+      // Show success message
+      alert(`Report "${template.name}" generated successfully!\nReport ID: ${reportId}`)
+      
+    } catch (error) {
+      alert(`Failed to generate report: ${error}`)
+    } finally {
+      setGeneratingReport(null)
+    }
+  }
+
+  // Download generated report
+  const downloadReport = (template: any, reportId: string) => {
+    // Create a mock PDF content (in real app, this would be the actual report)
+    const reportContent = `
+      REPORT: ${template.name}
+      Generated: ${new Date().toLocaleDateString()}
+      Report ID: ${reportId}
+      Category: ${template.category}
+      Location: ${template.location}
+      
+      This is a comprehensive report on ${template.name.toLowerCase()}.
+      It includes detailed analysis, metrics, and recommendations.
+    `
+    
+    // Create blob and download
+    const blob = new Blob([reportContent], { type: 'text/plain' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${template.name.replace(/\s+/g, '_')}_${reportId}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+    
+    alert(`Report "${template.name}" downloaded successfully!`)
+  }
+
+  // Close preview modal
+  const closePreviewModal = () => {
+    setShowPreviewModal(false)
+    setPreviewTemplate(null)
+  }
+
+  // Manual refresh function
+  const handleManualRefresh = () => {
+    hasFetchedData.current = false
+    setRealData({
+      plants: [],
+      pipelines: [],
+      renewables: [],
+      demand: []
+    })
+    fetchRealData()
   }
 
   return (
@@ -362,7 +477,7 @@ export default function ReportsPage() {
                 )}
                 
                 <button
-                  onClick={fetchRealData}
+                  onClick={handleManualRefresh}
                   disabled={isLoadingData}
                   className="px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-xl hover:bg-primary/20 transition-colors disabled:opacity-50"
                 >
@@ -420,11 +535,11 @@ export default function ReportsPage() {
                     className={`px-6 py-3 rounded-xl transition-colors flex items-center gap-2 ${
                       getActiveFilterCount() > 0 
                         ? 'bg-primary text-primary-foreground' 
-                        : 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20'
+                        : 'bg-muted/50 border border-muted/30 text-muted-foreground hover:bg-muted/70'
                     }`}
                   >
                     <Filter className="w-5 h-5" />
-                    Filters {getActiveFilterCount() > 0 && `(${getActiveFilterCount()})`}
+                    {getActiveFilterCount() > 0 ? `Active Filters (${getActiveFilterCount()})` : 'Filter Status'}
                   </button>
                   {getActiveFilterCount() > 0 && (
                     <button
@@ -436,49 +551,65 @@ export default function ReportsPage() {
                   )}
                 </div>
 
-                {/* Category Filters */}
-                {showFilters && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-3">Report Categories</h3>
-                    <div className="flex flex-wrap gap-3">
-                      {['All', 'Infrastructure', 'Industrial', 'Transport', 'Urban', 'Railways', 'Environmental'].map((category) => (
-                        <button
-                          key={category}
-                          onClick={() => setSelectedCategory(category)}
-                          className={`px-3 py-2 rounded-lg text-sm transition-all ${
-                            selectedCategory === category 
-                              ? 'bg-primary text-primary-foreground' 
-                              : 'bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30'
-                          }`}
-                        >
-                          {category}
-                        </button>
-                      ))}
-                    </div>
+                {/* Category Filters - Always Visible */}
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-3">Report Categories</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {['All', 'Infrastructure', 'Industrial', 'Transport', 'Urban', 'Railways', 'Environmental'].map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-3 py-2 rounded-lg text-sm transition-all ${
+                          selectedCategory === category 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30'
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
 
-                {/* Indian States Filter */}
-                {showFilters && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-3">Indian States</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {['All States', 'Gujarat', 'Maharashtra', 'Delhi', 'Tamil Nadu', 'Karnataka', 'Rajasthan'].map((state) => (
-                        <button
-                          key={state}
-                          onClick={() => setSelectedState(state)}
-                          className={`px-2 py-1 rounded-lg text-xs transition-all ${
-                            selectedState === state 
-                              ? 'bg-primary text-primary-foreground' 
-                              : 'bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30'
-                          }`}
-                        >
-                          {state}
-                        </button>
-                      ))}
-                    </div>
+                {/* Indian States Filter - Always Visible */}
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-3">Indian States</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['All States', 'Gujarat', 'Maharashtra', 'Delhi', 'Tamil Nadu', 'Karnataka', 'Rajasthan'].map((state) => (
+                      <button
+                        key={state}
+                        onClick={() => setSelectedState(state)}
+                        className={`px-2 py-1 rounded-lg text-xs transition-all ${
+                          selectedState === state 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30'
+                        }`}
+                      >
+                        {state}
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
+
+                {/* Report Status Filter - Always Visible */}
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-3">Report Status</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['All Status', 'Completed', 'Processing', 'Pending'].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => setSelectedStatus(status)}
+                        className={`px-2 py-1 rounded-lg text-xs transition-all ${
+                          selectedStatus === status 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30'
+                        }`}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Quick Actions */}
@@ -554,10 +685,15 @@ export default function ReportsPage() {
                               )}
                             </div>
                             <p className="text-xs text-muted-foreground mb-2">{template.description}</p>
-                            <div className="flex items-center gap-2 text-xs">
-                              <span className="bg-muted px-2 py-1 rounded-full">{template.category}</span>
-                              <span className="text-muted-foreground">{template.format}</span>
-                            </div>
+                                                     <div className="flex items-center gap-2 text-xs">
+                           <span className="bg-muted px-2 py-1 rounded-full">{template.category}</span>
+                           <span className="text-muted-foreground">{template.format}</span>
+                           {generatedReports[template.id] && (
+                             <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
+                               Generated
+                             </span>
+                           )}
+                         </div>
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -565,13 +701,33 @@ export default function ReportsPage() {
                           <span>{template.downloads} downloads</span>
                         </div>
                         <div className="mt-3 flex gap-2">
-                          <button className="flex-1 px-3 py-3 bg-primary/10 border border-primary/20 text-primary rounded-lg hover:bg-primary/20 transition-colors text-xs">
+                          <button 
+                            onClick={() => handlePreview(template)}
+                            className="flex-1 px-3 py-3 bg-primary/10 border border-primary/20 text-primary rounded-lg hover:bg-primary/20 transition-colors text-xs"
+                          >
                             <Eye className="w-3 h-3 inline mr-1" />
                             Preview
                           </button>
-                          <button className="flex-1 px-3 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-xs">
-                            <Download className="w-3 h-3 inline mr-1" />
-                            Generate
+                          <button 
+                            onClick={() => handleGenerateReport(template)}
+                            disabled={generatingReport === template.id}
+                            className={`flex-1 px-3 py-3 rounded-lg transition-colors text-xs ${
+                              generatingReport === template.id
+                                ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                                : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                            }`}
+                          >
+                            {generatingReport === template.id ? (
+                              <>
+                                <Loader2 className="w-3 h-3 inline mr-1 animate-spin" />
+                                Generating...
+                              </>
+                            ) : (
+                              <>
+                                <Download className="w-3 h-3 inline mr-1" />
+                                {generatedReports[template.id] ? 'Download' : 'Generate'}
+                              </>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -684,6 +840,116 @@ export default function ReportsPage() {
           </div>
         </div>
       </main>
+
+      {/* Preview Modal */}
+      {showPreviewModal && previewTemplate && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-background border border-glass-border rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">Report Preview</h2>
+                <button
+                  onClick={closePreviewModal}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors"
+                >
+                  <span className="sr-only">Close</span>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Template Header */}
+                <div className="flex items-start gap-4 p-4 bg-muted/20 rounded-xl">
+                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center border ${previewTemplate.color}`}>
+                    <previewTemplate.icon className="w-8 h-8" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">{previewTemplate.name}</h3>
+                    <p className="text-muted-foreground mb-3">{previewTemplate.description}</p>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full">
+                        {previewTemplate.category}
+                      </span>
+                      <span className="text-muted-foreground">{previewTemplate.format}</span>
+                      {previewTemplate.realData && (
+                        <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full">
+                          REAL DATA
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Template Details */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-muted/10 rounded-xl">
+                    <h4 className="font-semibold mb-2">Template Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Category:</span>
+                        <span>{previewTemplate.category}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Format:</span>
+                        <span>{previewTemplate.format}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Location:</span>
+                        <span>{previewTemplate.location}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Downloads:</span>
+                        <span>{previewTemplate.downloads}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Last Updated:</span>
+                        <span>{previewTemplate.lastUpdated}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-muted/10 rounded-xl">
+                    <h4 className="font-semibold mb-2">Report Content Preview</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="p-3 bg-background rounded-lg border">
+                        <p className="text-muted-foreground">This report will include:</p>
+                        <ul className="mt-2 space-y-1 text-xs">
+                          <li>• Comprehensive infrastructure analysis</li>
+                          <li>• Performance metrics and KPIs</li>
+                          <li>• Geographic distribution data</li>
+                          <li>• Recommendations and insights</li>
+                          <li>• Visual charts and graphs</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-glass-border">
+                  <button
+                    onClick={() => {
+                      closePreviewModal()
+                      handleGenerateReport(previewTemplate)
+                    }}
+                    className="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors font-medium"
+                  >
+                    Generate Report
+                  </button>
+                  <button
+                    onClick={closePreviewModal}
+                    className="px-6 py-3 bg-muted/50 border border-glass-border rounded-xl hover:bg-muted transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

@@ -17,15 +17,8 @@ export default function Page() {
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl floating-animation" style={{ animationDelay: '2s' }} />
         
         <div className="relative z-10 text-center max-w-5xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6">
-            <Leaf className="w-4 h-4" />
-            <span className="text-sm font-medium">भारत का हरित हाइड्रोजन भविष्य</span>
-          </div>
-          
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="gradient-text">OptiH2</span>
-            <br />
-            <span className="text-foreground">India</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">

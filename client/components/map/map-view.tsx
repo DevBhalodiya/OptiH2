@@ -3,7 +3,7 @@
 import "leaflet/dist/leaflet.css"
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Circle } from "react-leaflet"
 import L from "leaflet"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 import { LayersToggle, type LayersState } from "./layers-toggle"
 import {
   samplePlants,
@@ -28,11 +28,50 @@ export function MapView({ showZones = false }: { showZones?: boolean }) {
     demand: true,
     renewables: true,
   })
+  
+  const mapRef = useRef<any>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isClient, setIsClient] = useState(false)
+  const [mapKey, setMapKey] = useState(() => `map-${Math.random().toString(36).substr(2, 9)}`)
+
+  useEffect(() => {
+    setIsClient(true)
+    
+    // Cleanup function to remove map instance
+    return () => {
+      if (mapRef.current) {
+        try {
+          mapRef.current.remove()
+          mapRef.current = null
+        } catch (error) {
+          console.warn('Error cleaning up map:', error)
+        }
+      }
+    }
+  }, [])
 
   const center: [number, number] = useMemo(() => [50.5, 1], [])
+  
+  if (!isClient) {
+    return (
+      <div className="relative h-[70vh] w-full rounded-2xl border bg-muted/20 flex items-center justify-center">
+        <div className="text-muted-foreground">Loading map...</div>
+      </div>
+    )
+  }
+
   return (
-    <div className="relative h-[70vh] w-full rounded-2xl border">
-      <MapContainer center={center} zoom={6} className="h-full w-full rounded-2xl" scrollWheelZoom>
+    <div className="relative h-[70vh] w-full rounded-2xl border" ref={containerRef}>
+      <MapContainer 
+        key={mapKey}
+        center={center} 
+        zoom={6} 
+        className="h-full w-full rounded-2xl" 
+        scrollWheelZoom
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance
+        }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org" rel="noreferrer" target="_blank">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

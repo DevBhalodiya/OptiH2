@@ -24,13 +24,12 @@ export function Navbar() {
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-glass-border shadow-lg shadow-glass-shadow">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         {/* Logo */}
-        <Link href="/" aria-label="OptiH2 India" className="flex items-center gap-3 group">
+        <Link href="/" aria-label="OptiH2" className="flex items-center gap-3 group">
           <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center group-hover:bg-primary/30 transition-colors">
             <Leaf className="w-6 h-6 text-primary" />
           </div>
           <div className="hidden sm:block">
-            <span className="text-xl font-bold text-foreground">OptiH2</span>
-            <span className="text-xl font-bold gradient-text ml-2">India</span>
+            <span className="text-xl font-bold gradient-text">OptiH2</span>
           </div>
         </Link>
 

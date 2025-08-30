@@ -22,6 +22,239 @@ export const dataStore = {
   }
 };
 
+// Sample Indian hydrogen infrastructure data
+const sampleIndianData = {
+  plants: [
+    {
+      id: 'plant-1',
+      name: 'Gujarat Green Hydrogen Plant',
+      geometry: {
+        type: 'Point',
+        coordinates: [72.5714, 23.0225] // Gujarat
+      },
+      properties: {
+        capacity: 500,
+        status: 'operational',
+        operationalType: 'production',
+        state: 'Gujarat',
+        country: 'India'
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'plant-2',
+      name: 'Maharashtra Hydrogen Hub',
+      geometry: {
+        type: 'Point',
+        coordinates: [75.7139, 19.7515] // Maharashtra
+      },
+      properties: {
+        capacity: 750,
+        status: 'operational',
+        operationalType: 'production',
+        state: 'Maharashtra',
+        country: 'India'
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'plant-3',
+      name: 'Rajasthan Solar-H2 Facility',
+      geometry: {
+        type: 'Point',
+        coordinates: [74.2179, 27.0238] // Rajasthan
+      },
+      properties: {
+        capacity: 300,
+        status: 'under_construction',
+        operationalType: 'hydrogen',
+        state: 'Rajasthan',
+        country: 'India'
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'plant-4',
+      name: 'Tamil Nadu Storage Center',
+      geometry: {
+        type: 'Point',
+        coordinates: [78.6569, 11.0168] // Tamil Nadu
+      },
+      properties: {
+        capacity: 200,
+        status: 'planned',
+        operationalType: 'storage',
+        state: 'Tamil Nadu',
+        country: 'India'
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'plant-5',
+      name: 'Karnataka Distribution Hub',
+      geometry: {
+        type: 'Point',
+        coordinates: [75.7139, 15.3173] // Karnataka
+      },
+      properties: {
+        capacity: 150,
+        status: 'operational',
+        operationalType: 'distribution',
+        state: 'Karnataka',
+        country: 'India'
+      },
+      lastUpdated: new Date().toISOString()
+    }
+  ],
+  pipelines: [
+    {
+      id: 'pipeline-1',
+      name: 'Gujarat-Maharashtra Pipeline',
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [72.5714, 23.0225],
+          [75.7139, 19.7515]
+        ]
+      },
+      properties: {
+        length: 450,
+        capacity: 1000,
+        status: 'operational',
+        material: 'steel',
+        diameter: 30
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'pipeline-2',
+      name: 'Rajasthan Supply Line',
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [74.2179, 27.0238],
+          [77.1025, 28.7041]
+        ]
+      },
+      properties: {
+        length: 320,
+        capacity: 800,
+        status: 'under_construction',
+        material: 'composite',
+        diameter: 25
+      },
+      lastUpdated: new Date().toISOString()
+    }
+  ],
+  renewables: [
+    {
+      id: 'renewable-1',
+      location: {
+        latitude: 27.0238,
+        longitude: 74.2179,
+        state: 'Rajasthan',
+        country: 'India'
+      },
+      solar: {
+        suitabilityScore: 85,
+        averageIrradiance: 6.2,
+        peakSunHours: 7.5
+      },
+      wind: {
+        suitabilityScore: 65,
+        averageWindSpeed: 4.8,
+        windPowerDensity: 250
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'renewable-2',
+      location: {
+        latitude: 23.0225,
+        longitude: 72.5714,
+        state: 'Gujarat',
+        country: 'India'
+      },
+      solar: {
+        suitabilityScore: 80,
+        averageIrradiance: 5.8,
+        peakSunHours: 7.0
+      },
+      wind: {
+        suitabilityScore: 75,
+        averageWindSpeed: 5.2,
+        windPowerDensity: 320
+      },
+      lastUpdated: new Date().toISOString()
+    }
+  ],
+  demand: [
+    {
+      id: 'demand-1',
+      name: 'Mumbai Industrial Zone',
+      location: {
+        latitude: 19.0760,
+        longitude: 72.8777,
+        state: 'Maharashtra',
+        country: 'India'
+      },
+      population: {
+        total: 12442373,
+        urban: 11800000,
+        rural: 642373
+      },
+      industrialDemand: 850,
+      transportDemand: 420,
+      urbanPopulation: {
+        total: 11800000,
+        density: 20694
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'demand-2',
+      name: 'Delhi NCR Region',
+      location: {
+        latitude: 28.7041,
+        longitude: 77.1025,
+        state: 'Delhi',
+        country: 'India'
+      },
+      population: {
+        total: 16753235,
+        urban: 14000000,
+        rural: 2753235
+      },
+      industrialDemand: 1200,
+      transportDemand: 680,
+      urbanPopulation: {
+        total: 14000000,
+        density: 11297
+      },
+      lastUpdated: new Date().toISOString()
+    }
+  ]
+};
+
+// Initialize with sample data
+function initializeSampleData() {
+  dataStore.plants = [...sampleIndianData.plants];
+  dataStore.pipelines = [...sampleIndianData.pipelines];
+  dataStore.renewables = [...sampleIndianData.renewables];
+  dataStore.demand = [...sampleIndianData.demand];
+  
+  const now = new Date().toISOString();
+  dataStore.lastUpdated.plants = now;
+  dataStore.lastUpdated.pipelines = now;
+  dataStore.lastUpdated.renewables = now;
+  dataStore.lastUpdated.demand = now;
+  
+  logger.info(`Initialized with sample data: ${dataStore.plants.length} plants, ${dataStore.pipelines.length} pipelines, ${dataStore.renewables.length} renewables, ${dataStore.demand.length} demand centers`);
+}
+
+// Initialize sample data on startup
+initializeSampleData();
+
 /**
  * Fetch and update all hydrogen infrastructure data
  */

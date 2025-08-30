@@ -4,6 +4,7 @@ import { Navbar } from "@/components/navbar"
 import { DynamicMap } from "@/components/map/dynamic-map"
 import { LayersToggle, type LayersState } from "@/components/map/layers-toggle"
 import { useState, useEffect } from "react"
+import { useMapData } from "@/hooks/useMapData"
 import { 
   MapPin, 
   Zap, 
@@ -36,49 +37,19 @@ export default function MapPage() {
   // State for selected Indian states
   const [selectedStates, setSelectedStates] = useState<string[]>([])
 
-  // Real data state
-  const [realData, setRealData] = useState<{
-    plants: any[]
-    pipelines: any[]
-    renewables: any[]
-    demand: any[]
-  }>({
-    plants: [],
-    pipelines: [],
-    renewables: [],
-    demand: []
+  // Use the enhanced useMapData hook
+  const { data: mapData, stats, loading: isLoadingData, error: dataError, refreshData: fetchRealData, realDataStatus } = useMapData(layers, {
+    useRealData: true,
+    autoRefresh: false
   })
-  const [isLoadingData, setIsLoadingData] = useState(false)
-  const [dataError, setDataError] = useState<string | null>(null)
 
-  // Fetch real data on component mount
-  useEffect(() => {
-    fetchRealData()
-  }, [])
-
-  const fetchRealData = async () => {
-    setIsLoadingData(true)
-    setDataError(null)
-    
-    try {
-      const response = await fetch('/api/real-data')
-      if (!response.ok) {
-        throw new Error('Failed to fetch real data')
-      }
-      
-      const result = await response.json()
-      if (result.success) {
-        setRealData(result.data)
-      } else {
-        throw new Error(result.error || 'Failed to fetch data')
-      }
-    } catch (error) {
-      console.error('Error fetching real data:', error)
-      setDataError(error instanceof Error ? error.message : 'Failed to fetch data')
-    } finally {
-      setIsLoadingData(false)
-    }
-  }
+  // Clean logging for production
+  console.log('Map page loaded with real data:', {
+    plants: mapData?.plants?.length || 0,
+    pipelines: mapData?.pipelines?.length || 0,
+    renewables: mapData?.renewables?.length || 0,
+    demand: mapData?.demandCenters?.length || 0
+  })
 
   // Dynamic plant types based on real data
   const plantTypes = [
@@ -86,33 +57,33 @@ export default function MapPage() {
       id: 'solar', 
       name: 'Solar Power', 
       icon: Sun, 
-      count: realData.renewables.filter(r => r.type === 'solar').length || 28, 
+      count: mapData.renewables.filter(r => r.solar).length || 28, 
       color: 'text-yellow-500',
-      realData: realData.renewables.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'wind', 
       name: 'Wind Power', 
       icon: Wind, 
-      count: realData.renewables.filter(r => r.type === 'wind').length || 15, 
+      count: mapData.renewables.filter(r => r.wind).length || 15, 
       color: 'text-blue-500',
-      realData: realData.renewables.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'hydro', 
       name: 'Hydroelectric', 
       icon: Droplets, 
-      count: realData.renewables.filter(r => r.type === 'hydro').length || 12, 
+      count: mapData.renewables.filter(r => !r.solar && !r.wind).length || 12, 
       color: 'text-cyan-500',
-      realData: realData.renewables.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'hybrid', 
       name: 'Hybrid Systems', 
       icon: Zap, 
-      count: realData.plants.length || 22, 
+      count: mapData.plants.length || 22, 
       color: 'text-purple-500',
-      realData: realData.plants.length > 0
+      realData: realDataStatus === 'available'
     }
   ]
 
@@ -121,30 +92,30 @@ export default function MapPage() {
     { 
       id: 'active', 
       name: 'Active', 
-      count: realData.plants.length + realData.pipelines.length || 58, 
+      count: mapData.plants.length + mapData.pipelines.length || 58, 
       color: 'text-green-500',
-      realData: realData.plants.length > 0 || realData.pipelines.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'maintenance', 
       name: 'Maintenance', 
-      count: Math.max(1, Math.floor((realData.plants.length + realData.pipelines.length) * 0.1)) || 5, 
+      count: Math.max(1, Math.floor((mapData.plants.length + mapData.pipelines.length) * 0.1)) || 5, 
       color: 'text-yellow-500',
-      realData: realData.plants.length > 0 || realData.pipelines.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'planned', 
       name: 'Planned', 
-      count: Math.max(1, Math.floor((realData.plants.length + realData.pipelines.length) * 0.2)) || 12, 
+      count: Math.max(1, Math.floor((mapData.plants.length + mapData.pipelines.length) * 0.2)) || 12, 
       color: 'text-blue-500',
-      realData: realData.plants.length > 0 || realData.pipelines.length > 0
+      realData: realDataStatus === 'available'
     },
     { 
       id: 'offline', 
       name: 'Offline', 
-      count: Math.max(1, Math.floor((realData.plants.length + realData.pipelines.length) * 0.05)) || 2, 
+      count: Math.max(1, Math.floor((mapData.plants.length + mapData.pipelines.length) * 0.05)) || 2, 
       color: 'text-red-500',
-      realData: realData.plants.length > 0 || realData.pipelines.length > 0
+      realData: realDataStatus === 'available'
     }
   ]
 
@@ -184,7 +155,7 @@ export default function MapPage() {
                     <AlertCircle className="w-4 h-4 text-red-400" />
                     <span className="text-sm text-red-400">Data Error</span>
                   </div>
-                ) : realData.plants.length > 0 ? (
+                ) : realDataStatus === 'available' ? (
                   <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-xl">
                     <CheckCircle className="w-4 h-4 text-green-400" />
                     <span className="text-sm text-green-400">Real Data Active</span>
@@ -362,7 +333,13 @@ export default function MapPage() {
             </div>
             
             <div className="relative">
-              <DynamicMap layers={layers} onLayersChange={setLayers} selectedStates={selectedStates} />
+              <DynamicMap 
+                layers={layers} 
+                onLayersChange={setLayers} 
+                selectedStates={selectedStates}
+                mapData={mapData}
+                loading={isLoadingData}
+              />
             </div>
           </div>
 

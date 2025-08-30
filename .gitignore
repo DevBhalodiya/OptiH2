@@ -129,6 +129,3 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Server directory - prevent merge conflicts
-server/

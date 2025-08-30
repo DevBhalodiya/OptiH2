@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import { useState, useEffect } from "react"
 import { type LayersState } from "./layers-toggle"
+import { type MapData } from "@/hooks/useMapData"
 
 // Dynamically import LeafletMap with no SSR to prevent hydration issues
 const LeafletMap = dynamic(() => import("./leaflet-map").then((mod) => ({ default: mod.LeafletMap })), {
@@ -18,12 +19,16 @@ export function DynamicMap({
   showZones = false, 
   layers, 
   onLayersChange,
-  selectedStates = []
+  selectedStates = [],
+  mapData,
+  loading = false
 }: { 
   showZones?: boolean
   layers?: LayersState
   onLayersChange?: (layers: LayersState) => void
   selectedStates?: string[]
+  mapData?: MapData
+  loading?: boolean
 }) {
   const [isMounted, setIsMounted] = useState(false)
   
@@ -39,5 +44,14 @@ export function DynamicMap({
     )
   }
   
-  return <LeafletMap showZones={showZones} layers={layers} onLayersChange={onLayersChange} selectedStates={selectedStates} />
+  return (
+    <LeafletMap 
+      showZones={showZones} 
+      layers={layers} 
+      onLayersChange={onLayersChange} 
+      selectedStates={selectedStates}
+      mapData={mapData}
+      loading={loading}
+    />
+  )
 }

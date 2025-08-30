@@ -9,7 +9,7 @@ import {
   Layers,
   ChevronDown
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export interface LayersState {
   plants: boolean
@@ -26,6 +26,29 @@ interface LayersToggleProps {
 
 export function LayersToggle({ layers, onChange }: LayersToggleProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  // Toggle dropdown
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsOpen(!isOpen)
+  }
+
+  // Handle layer toggle
   
   const layerConfig = {
     plants: { name: "Plants", icon: MapPin, color: "text-green-500" },
@@ -35,7 +58,8 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
     renewables: { name: "Renewables", icon: Leaf, color: "text-emerald-500" }
   }
 
-  const toggleLayer = (key: keyof LayersState) => {
+  const toggleLayer = (e: React.MouseEvent, key: keyof LayersState) => {
+    e.stopPropagation()
     onChange({
       ...layers,
       [key]: !layers[key]
@@ -46,11 +70,13 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
   const totalCount = Object.keys(layers).length
 
   return (
-    <div className="relative">
+    <div className="relative z-[1000]" ref={dropdownRef}>
       {/* Dropdown Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-background/95 backdrop-blur-md border border-glass-border rounded-lg shadow-lg hover:bg-background/80 transition-all duration-200 min-w-32"
+        onClick={toggleDropdown}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        className="flex items-center gap-2 px-3 py-2 bg-background/95 backdrop-blur-md border border-glass-border rounded-lg shadow-lg hover:bg-background/80 transition-all duration-200 min-w-32 relative z-[1001]"
       >
         <div className="w-5 h-5 bg-primary/10 rounded-md flex items-center justify-center">
           <Layers className="w-3 h-3 text-primary" />
@@ -63,7 +89,7 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
 
       {/* Dropdown Content */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 bg-background/95 backdrop-blur-md border border-glass-border rounded-xl p-3 shadow-xl min-w-64 z-50">
+        <div className="absolute top-full left-0 mt-1 bg-background/95 backdrop-blur-md border border-glass-border rounded-xl p-3 shadow-xl min-w-64 z-[1002] transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xs font-semibold text-foreground">Map Layers</h3>
             <div className="text-xs text-muted-foreground">
@@ -77,7 +103,7 @@ export function LayersToggle({ layers, onChange }: LayersToggleProps) {
               return (
                 <button
                   key={key}
-                  onClick={() => toggleLayer(key as keyof LayersState)}
+                  onClick={(e) => toggleLayer(e, key as keyof LayersState)}
                   className={`w-full group relative overflow-hidden rounded-lg p-2 transition-all duration-200 ${
                     isActive 
                       ? 'bg-primary/15 border border-primary/30' 

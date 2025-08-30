@@ -3,17 +3,17 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Menu, X, Leaf } from "lucide-react"
+import { Menu, X, Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info } from "lucide-react"
 import { useState } from "react"
 import { ThemeToggle } from "./theme-provider"
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/map", label: "Map" },
-  { href: "/optimize", label: "Optimize" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/reports", label: "Reports" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/map", label: "Map", icon: MapPin },
+  { href: "/optimize", label: "Optimize", icon: Zap },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/reports", label: "Reports", icon: FileText },
+  { href: "/about", label: "About", icon: Info },
 ]
 
 export function Navbar() {
@@ -40,14 +40,15 @@ export function Navbar() {
               <Link
                 href={link.href}
                 className={cn(
-                  "rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 relative overflow-hidden",
-                  pathname === link.href
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                    : "text-foreground/80 hover:text-foreground hover:bg-primary/10 hover:scale-105"
+                  "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium",
+                  pathname === link.href && "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
                 )}
                 aria-current={pathname === link.href ? "page" : undefined}
               >
-                {link.label}
+                <>
+                  <link.icon className="w-4 h-4" />
+                  <span>{link.label}</span>
+                </>
                 {pathname === link.href && (
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl" />
                 )}
@@ -79,15 +80,19 @@ export function Navbar() {
                 <Link
                   href={link.href}
                   className={cn(
-                    "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
-                    pathname === link.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground/80 hover:text-foreground hover:bg-primary/10"
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium",
+                    pathname === link.href && "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
                   )}
                   onClick={() => setIsMobileMenuOpen(false)}
                   aria-current={pathname === link.href ? "page" : undefined}
                 >
-                  {link.label}
+                  <>
+                    <link.icon className="w-4 h-4" />
+                    <span>{link.label}</span>
+                  </>
+                  {pathname === link.href && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl" />
+                  )}
                 </Link>
               </li>
             ))}

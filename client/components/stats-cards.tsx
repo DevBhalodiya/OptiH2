@@ -8,23 +8,25 @@ import {
   Globe, 
   Activity,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Building2,
+  Factory
 } from "lucide-react"
 
 export function StatsCards() {
   const stats = [
     {
-      title: "Total Production",
-      value: "2.4 TWh",
-      change: "+12.5%",
+      title: "Total Production Capacity",
+      value: "5.8 GW",
+      change: "+15.2%",
       trend: "up",
       icon: Zap,
       color: "primary",
-      description: "Annual hydrogen production capacity"
+      description: "Annual hydrogen production across India"
     },
     {
       title: "Carbon Reduction",
-      value: "1.8M tons",
+      value: "4.2M tons",
       change: "+18.3%",
       trend: "up",
       icon: Leaf,
@@ -33,8 +35,8 @@ export function StatsCards() {
     },
     {
       title: "Active Plants",
-      value: "41",
-      change: "+3",
+      value: "67",
+      change: "+8",
       trend: "up",
       icon: MapPin,
       color: "blue",
@@ -42,30 +44,30 @@ export function StatsCards() {
     },
     {
       title: "Network Efficiency",
-      value: "94.2%",
-      change: "+2.1%",
+      value: "92.4%",
+      change: "+3.1%",
       trend: "up",
       icon: TrendingUp,
       color: "purple",
       description: "Overall system performance"
     },
     {
-      title: "Geographic Coverage",
-      value: "12 States",
-      change: "+2",
+      title: "States Covered",
+      value: "18",
+      change: "+3",
       trend: "up",
       icon: Globe,
       color: "orange",
-      description: "States with infrastructure"
+      description: "Indian states with infrastructure"
     },
     {
-      title: "Uptime",
-      value: "98.7%",
-      change: "-0.3%",
-      trend: "down",
-      icon: Activity,
+      title: "Industrial Integration",
+      value: "85.7%",
+      change: "+2.3%",
+      trend: "up",
+      icon: Factory,
       color: "red",
-      description: "System availability"
+      description: "Heavy industry adoption rate"
     }
   ]
 

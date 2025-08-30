@@ -14,7 +14,9 @@ import {
   Filter,
   Search,
   Layers,
-  Info
+  Info,
+  Building2,
+  Factory
 } from "lucide-react"
 import { useState } from "react"
 
@@ -28,19 +30,26 @@ export default function MapPage() {
     renewables: true
   })
 
-  // Mock data for map filters
+  // Mock data for Indian map filters
   const plantTypes = [
-    { id: 'solar', name: 'Solar Power', icon: Sun, count: 12, color: 'text-yellow-500' },
-    { id: 'wind', name: 'Wind Power', icon: Wind, count: 8, color: 'text-blue-500' },
-    { id: 'hydro', name: 'Hydroelectric', icon: Droplets, count: 6, color: 'text-cyan-500' },
-    { id: 'hybrid', name: 'Hybrid Systems', icon: Zap, count: 15, color: 'text-purple-500' }
+    { id: 'solar', name: 'Solar Power', icon: Sun, count: 28, color: 'text-yellow-500' },
+    { id: 'wind', name: 'Wind Power', icon: Wind, count: 15, color: 'text-blue-500' },
+    { id: 'hydro', name: 'Hydroelectric', icon: Droplets, count: 12, color: 'text-cyan-500' },
+    { id: 'hybrid', name: 'Hybrid Systems', icon: Zap, count: 22, color: 'text-purple-500' }
   ]
 
   const statusFilters = [
-    { id: 'active', name: 'Active', count: 28, color: 'text-green-500' },
-    { id: 'maintenance', name: 'Maintenance', count: 3, color: 'text-yellow-500' },
-    { id: 'planned', name: 'Planned', count: 7, color: 'text-blue-500' },
+    { id: 'active', name: 'Active', count: 58, color: 'text-green-500' },
+    { id: 'maintenance', name: 'Maintenance', count: 5, color: 'text-yellow-500' },
+    { id: 'planned', name: 'Planned', count: 12, color: 'text-blue-500' },
     { id: 'offline', name: 'Offline', count: 2, color: 'text-red-500' }
+  ]
+
+  const indianStates = [
+    'Gujarat', 'Maharashtra', 'Rajasthan', 'Tamil Nadu', 'Karnataka',
+    'Telangana', 'Andhra Pradesh', 'Madhya Pradesh', 'Uttar Pradesh',
+    'West Bengal', 'Odisha', 'Chhattisgarh', 'Jharkhand', 'Bihar',
+    'Assam', 'Punjab', 'Haryana', 'Delhi'
   ]
 
   return (
@@ -51,10 +60,10 @@ export default function MapPage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Infrastructure <span className="gradient-text">Map</span>
+              Indian Infrastructure <span className="gradient-text">Map</span>
             </h1>
             <p className="text-xl text-muted-foreground">
-              Visualize hydrogen infrastructure locations, status, and performance across the network
+              Visualize hydrogen infrastructure locations, status, and performance across Indian states
             </p>
           </div>
 
@@ -68,7 +77,7 @@ export default function MapPage() {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="text"
-                      placeholder="Search plants, locations, or coordinates..."
+                      placeholder="Search Indian plants, locations, or coordinates..."
                       className="w-full pl-10 pr-4 py-3 bg-background/50 border border-glass-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
                     />
                   </div>
@@ -117,24 +126,45 @@ export default function MapPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* Indian States Filter */}
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    Indian States
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {indianStates.slice(0, 8).map((state) => (
+                      <button
+                        key={state}
+                        className="px-2 py-1 rounded-lg bg-background/50 border border-glass-border hover:bg-primary/10 hover:border-primary/30 transition-all text-xs"
+                      >
+                        {state}
+                      </button>
+                    ))}
+                    <button className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs">
+                      +{indianStates.length - 8} more
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Quick Stats */}
               <div className="lg:w-80 space-y-4">
                 <div className="glass-card p-4 rounded-xl bg-primary/5 border border-primary/20">
-                  <h3 className="text-lg font-semibold mb-2">Network Overview</h3>
+                  <h3 className="text-lg font-semibold mb-2">Indian Network Overview</h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Total Plants:</span>
-                      <span className="font-semibold">41</span>
+                      <span className="font-semibold">67</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Active Capacity:</span>
-                      <span className="font-semibold">2.4 GW</span>
+                      <span className="font-semibold">5.8 GW</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Coverage Area:</span>
-                      <span className="font-semibold">12 States</span>
+                      <span className="text-muted-foreground">States Covered:</span>
+                      <span className="font-semibold">18</span>
                     </div>
                   </div>
                 </div>
@@ -144,15 +174,15 @@ export default function MapPage() {
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full" />
-                      <span>Green Valley H2 commissioned</span>
+                      <span>Gujarat Green H2 commissioned</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full" />
-                      <span>Coastal Hub optimization complete</span>
+                      <span>Maharashtra Hub optimization complete</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-yellow-500 rounded-full" />
-                      <span>Desert Station maintenance alert</span>
+                      <span>Rajasthan Station maintenance alert</span>
                     </div>
                   </div>
                 </div>
@@ -163,7 +193,7 @@ export default function MapPage() {
           {/* Map Container */}
           <div className="glass-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Interactive Map</h2>
+              <h2 className="text-2xl font-bold">Interactive Indian Infrastructure Map</h2>
               <div className="flex items-center gap-2">
                 <LayersToggle layers={layers} onChange={setLayers} />
                 <button className="px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-lg hover:bg-primary/20 transition-colors flex items-center gap-2">
@@ -216,7 +246,7 @@ export default function MapPage() {
                 className="glass-button px-6 py-3 rounded-xl text-sm font-medium inline-flex items-center gap-2 hover:scale-105 transition-transform"
               >
                 <Info className="w-4 h-4" />
-                Generate Map Report
+                Generate Indian Infrastructure Report
               </a>
             </div>
           </div>

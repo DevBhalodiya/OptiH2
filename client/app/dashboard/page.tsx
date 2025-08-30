@@ -1,120 +1,179 @@
+"use client"
+
 import { Navbar } from "@/components/navbar"
-import { StatsCards } from "@/components/stats-cards"
 import { 
   TrendingUp, 
-  TrendingDown, 
-  Activity, 
   Zap, 
   Leaf, 
   MapPin, 
-  BarChart3, 
-  Clock,
+  Activity, 
   Calendar,
+  Clock,
   Target,
+  BarChart3,
+  Globe,
+  Building2,
+  Factory,
+  Train,
+  Car,
+  ArrowRight,
   CheckCircle,
   AlertCircle,
-  ArrowUpRight,
-  ArrowDownRight
+  Info
 } from "lucide-react"
 
 export default function DashboardPage() {
-  // Mock data for dashboard
-  const recentActivities = [
+  // Mock data for Indian dashboard
+  const performanceMetrics = [
     {
-      id: 1,
-      type: "Plant Commissioned",
-      plant: "Green Valley H2",
-      location: "California, USA",
-      time: "2 hours ago",
-      status: "success",
-      icon: CheckCircle
+      title: "Total Production",
+      value: "5.8 GW",
+      change: "+15.2%",
+      trend: "up",
+      icon: Zap,
+      color: "text-green-500"
     },
     {
-      id: 2,
-      type: "Optimization Complete",
-      plant: "Coastal Energy Hub",
-      location: "Texas, USA",
-      time: "4 hours ago",
-      status: "success",
-      icon: CheckCircle
+      title: "Carbon Reduction",
+      value: "4.2M tons",
+      change: "+18.3%",
+      trend: "up",
+      icon: Leaf,
+      color: "text-emerald-500"
     },
     {
-      id: 3,
-      type: "Maintenance Alert",
-      plant: "Desert Sun Station",
-      location: "Arizona, USA",
-      time: "6 hours ago",
-      status: "warning",
-      icon: AlertCircle
+      title: "Network Efficiency",
+      value: "92.4%",
+      change: "+3.1%",
+      trend: "up",
+      icon: TrendingUp,
+      color: "text-blue-500"
     },
     {
-      id: 4,
-      type: "Production Peak",
-      plant: "Mountain Peak H2",
-      location: "Colorado, USA",
-      time: "8 hours ago",
-      status: "success",
-      icon: TrendingUp
+      title: "States Covered",
+      value: "18",
+      change: "+3",
+      trend: "up",
+      icon: MapPin,
+      color: "text-purple-500"
     }
   ]
 
-  const performanceMetrics = [
+  const recentActivities = [
     {
-      name: "Total Production",
-      value: "2.4 TWh",
-      change: "+12.5%",
-      trend: "up",
-      icon: Zap
+      id: 1,
+      type: "commissioned",
+      title: "Gujarat Green H2 Plant",
+      description: "100 MW solar-powered hydrogen plant commissioned successfully",
+      time: "2 hours ago",
+      status: "completed",
+      location: "Gujarat"
     },
     {
-      name: "Efficiency Rate",
-      value: "94.2%",
-      change: "+2.1%",
-      trend: "up",
-      icon: Target
+      id: 2,
+      type: "optimization",
+      title: "Maharashtra Energy Hub",
+      description: "Network optimization completed, efficiency improved by 12%",
+      time: "4 hours ago",
+      status: "completed",
+      location: "Maharashtra"
     },
     {
-      name: "Carbon Reduction",
-      value: "1.8M tons",
-      change: "+18.3%",
-      trend: "up",
-      icon: Leaf
+      id: 3,
+      type: "maintenance",
+      title: "Rajasthan Solar Station",
+      description: "Scheduled maintenance alert - plant will be offline for 6 hours",
+      time: "6 hours ago",
+      status: "warning",
+      location: "Rajasthan"
     },
     {
-      name: "Uptime",
-      value: "98.7%",
-      change: "-0.3%",
-      trend: "down",
-      icon: Activity
+      id: 4,
+      type: "planned",
+      title: "Tamil Nadu Coastal Hub",
+      description: "New 80 MW offshore wind-hydrogen project approved",
+      time: "1 day ago",
+      status: "planned",
+      location: "Tamil Nadu"
     }
   ]
 
   const upcomingEvents = [
     {
       id: 1,
-      title: "Plant Maintenance",
-      plant: "Urban Green Hub",
-      date: "Tomorrow",
-      time: "09:00 AM",
-      type: "maintenance"
+      title: "National Hydrogen Mission Review",
+      date: "Dec 15, 2024",
+      time: "10:00 AM",
+      type: "meeting",
+      participants: "Ministry Officials, Industry Leaders"
     },
     {
       id: 2,
-      title: "Optimization Run",
-      plant: "Green Valley H2",
-      date: "Dec 2",
-      time: "02:00 PM",
-      type: "optimization"
+      title: "Karnataka Smart Grid Commissioning",
+      date: "Dec 18, 2024",
+      time: "2:00 PM",
+      type: "commissioning",
+      participants: "State Officials, Technical Team"
     },
     {
       id: 3,
-      title: "Performance Review",
-      plant: "All Plants",
-      date: "Dec 5",
-      time: "10:00 AM",
-      type: "review"
+      title: "Steel Industry Hydrogen Integration Workshop",
+      date: "Dec 20, 2024",
+      time: "11:00 AM",
+      type: "workshop",
+      participants: "Industry Experts, Policy Makers"
     }
   ]
+
+  const quickActions = [
+    {
+      title: "Run Network Optimization",
+      description: "Optimize hydrogen network for Indian cities",
+      icon: Zap,
+      href: "/optimize",
+      color: "bg-primary/10 text-primary border-primary/20"
+    },
+    {
+      title: "Generate Indian Report",
+      description: "Create comprehensive report for stakeholders",
+      icon: BarChart3,
+      href: "/reports",
+      color: "bg-accent/10 text-accent border-accent/20"
+    },
+    {
+      title: "View Infrastructure Map",
+      description: "Explore Indian hydrogen infrastructure",
+      icon: MapPin,
+      href: "/map",
+      color: "bg-green-100 text-green-600 border-green-200"
+    }
+  ]
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle className="w-5 h-5 text-green-500" />
+      case 'warning':
+        return <AlertCircle className="w-5 h-5 text-yellow-500" />
+      case 'planned':
+        return <Info className="w-5 h-5 text-blue-500" />
+      default:
+        return <Activity className="w-5 h-5 text-gray-500" />
+    }
+  }
+
+  const getEventIcon = (type: string) => {
+    switch (type) {
+      case 'meeting':
+        return <Calendar className="w-5 h-5 text-blue-500" />
+      case 'commissioning':
+        return <Zap className="w-5 h-5 text-green-500" />
+      case 'workshop':
+        return <Target className="w-5 h-5 text-purple-500" />
+      default:
+        return <Clock className="w-5 h-5 text-gray-500" />
+    }
+  }
 
   return (
     <>
@@ -124,129 +183,167 @@ export default function DashboardPage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Dashboard <span className="gradient-text">Overview</span>
+              Indian Infrastructure <span className="gradient-text">Dashboard</span>
             </h1>
             <p className="text-xl text-muted-foreground">
-              Monitor your hydrogen infrastructure performance and track key metrics
+              Monitor and manage India's hydrogen infrastructure network in real-time
             </p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="mb-12">
-            <StatsCards />
+          {/* Performance Metrics */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {performanceMetrics.map((metric, index) => (
+              <div key={index} className="glass-card p-6 rounded-2xl hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center`}>
+                    <metric.icon className={`w-6 h-6 ${metric.color}`} />
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-muted-foreground">Change</div>
+                    <div className="text-lg font-semibold text-green-600">{metric.change}</div>
+                  </div>
+                </div>
+                <div className="text-3xl font-bold mb-2">{metric.value}</div>
+                <div className="text-muted-foreground">{metric.title}</div>
+              </div>
+            ))}
           </div>
 
-          {/* Performance Metrics */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Performance Metrics</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {performanceMetrics.map((metric, index) => (
-                <div key={index} className="glass-card p-6 rounded-2xl hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <metric.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <div className={`flex items-center gap-1 text-sm font-medium ${
-                      metric.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {metric.trend === 'up' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                      {metric.change}
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-1">{metric.value}</h3>
-                  <p className="text-muted-foreground text-sm">{metric.name}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Recent Activities */}
-            <section className="glass-card p-6 rounded-2xl">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Recent Activities</h2>
-                <Activity className="w-6 h-6 text-primary" />
-              </div>
-              <div className="space-y-4">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-4 p-4 rounded-xl bg-background/50 border border-glass-border">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      activity.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
-                    }`}>
-                      <activity.icon className="w-5 h-5" />
+            <div className="lg:col-span-2">
+              <div className="glass-card p-6 rounded-2xl">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold">Recent Indian Activities</h2>
+                  <a href="/map" className="text-primary hover:underline flex items-center gap-2 text-sm">
+                    View All
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+                <div className="space-y-4">
+                  {recentActivities.map((activity) => (
+                    <div key={activity.id} className="flex items-start gap-4 p-4 rounded-xl bg-background/50 border border-glass-border hover:bg-background/80 transition-colors">
+                      <div className="mt-1">
+                        {getStatusIcon(activity.status)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold">{activity.title}</h3>
+                          <span className="text-xs bg-muted px-2 py-1 rounded-full">{activity.location}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">{activity.description}</p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Clock className="w-3 h-3" />
+                          {activity.time}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground">{activity.type}</h4>
-                      <p className="text-sm text-muted-foreground">{activity.plant} • {activity.location}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </section>
+            </div>
 
             {/* Upcoming Events */}
-            <section className="glass-card p-6 rounded-2xl">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Upcoming Events</h2>
-                <Calendar className="w-6 h-6 text-primary" />
-              </div>
-              <div className="space-y-4">
-                {upcomingEvents.map((event) => (
-                  <div key={event.id} className="flex items-center gap-4 p-4 rounded-xl bg-background/50 border border-glass-border">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      event.type === 'maintenance' ? 'bg-blue-100 text-blue-600' : 
-                      event.type === 'optimization' ? 'bg-purple-100 text-purple-600' : 'bg-orange-100 text-orange-600'
-                    }`}>
-                      {event.type === 'maintenance' ? <Clock className="w-5 h-5" /> :
-                       event.type === 'optimization' ? <Zap className="w-5 h-5" /> : <BarChart3 className="w-5 h-5" />}
+            <div>
+              <div className="glass-card p-6 rounded-2xl">
+                <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
+                <div className="space-y-4">
+                  {upcomingEvents.map((event) => (
+                    <div key={event.id} className="p-4 rounded-xl bg-background/50 border border-glass-border">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1">
+                          {getEventIcon(event.type)}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-sm mb-1">{event.title}</h3>
+                          <div className="text-xs text-muted-foreground space-y-1">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {event.date} at {event.time}
+                            </div>
+                            <div className="text-xs">{event.participants}</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground">{event.title}</h4>
-                      <p className="text-sm text-muted-foreground">{event.plant}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{event.date} at {event.time}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </section>
-          </div>
 
-          {/* Quick Actions */}
-          <section className="mt-12">
-            <div className="glass-card p-8 rounded-2xl">
-              <h2 className="text-2xl font-bold text-center mb-6">Quick Actions</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                <a
-                  href="/map"
-                  className="group p-6 rounded-2xl bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-300 text-center hover:scale-105"
-                >
-                  <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">View Map</h3>
-                  <p className="text-muted-foreground text-sm">Explore infrastructure locations and status</p>
-                </a>
-                
-                <a
-                  href="/optimize"
-                  className="group p-6 rounded-2xl bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-300 text-center hover:scale-105"
-                >
-                  <Zap className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Run Optimization</h3>
-                  <p className="text-muted-foreground text-sm">Optimize your hydrogen network</p>
-                </a>
-                
-                <a
-                  href="/reports"
-                  className="group p-6 rounded-2xl bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-300 text-center hover:scale-105"
-                >
-                  <BarChart3 className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Generate Reports</h3>
-                  <p className="text-muted-foreground text-sm">Create detailed performance reports</p>
-                </a>
+              {/* Quick Actions */}
+              <div className="glass-card p-6 rounded-2xl mt-6">
+                <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
+                <div className="space-y-3">
+                  {quickActions.map((action, index) => (
+                    <a
+                      key={index}
+                      href={action.href}
+                      className="flex items-center gap-3 p-3 rounded-xl border hover:scale-105 transition-all duration-300 group"
+                      style={{ 
+                        backgroundColor: action.color.split(' ')[0].replace('bg-', ''),
+                        borderColor: action.color.split(' ')[2]?.replace('border-', '') || 'transparent'
+                      }}
+                    >
+                      <action.icon className="w-5 h-5" />
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{action.title}</div>
+                        <div className="text-xs opacity-80">{action.description}</div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+
+          {/* Indian Energy Sectors Overview */}
+          <div className="mt-8">
+            <div className="glass-card p-6 rounded-2xl">
+              <h2 className="text-2xl font-bold mb-6">Powering India's Key Sectors</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/20">
+                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Factory className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">Steel & Cement</h3>
+                  <p className="text-sm text-muted-foreground">Decarbonizing heavy industries</p>
+                  <div className="mt-3 text-2xl font-bold text-primary">85.7%</div>
+                  <div className="text-xs text-muted-foreground">Integration Rate</div>
+                </div>
+                
+                <div className="text-center p-4 rounded-xl bg-accent/5 border border-accent/20">
+                  <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Train className="w-8 h-8 text-accent" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">Indian Railways</h3>
+                  <p className="text-sm text-muted-foreground">Hydrogen-powered locomotives</p>
+                  <div className="mt-3 text-2xl font-bold text-accent">12</div>
+                  <div className="text-xs text-muted-foreground">Active Routes</div>
+                </div>
+                
+                <div className="text-center p-4 rounded-xl bg-green-100 border border-green-200">
+                  <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Car className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">Transportation</h3>
+                  <p className="text-sm text-muted-foreground">Fuel cell vehicles & buses</p>
+                  <div className="mt-3 text-2xl font-bold text-green-600">2,450</div>
+                  <div className="text-xs text-muted-foreground">Active Vehicles</div>
+                </div>
+                
+                <div className="text-center p-4 rounded-xl bg-purple-100 border border-purple-200">
+                  <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">Smart Cities</h3>
+                  <p className="text-sm text-muted-foreground">Urban energy infrastructure</p>
+                  <div className="mt-3 text-2xl font-bold text-purple-600">8</div>
+                  <div className="text-xs text-muted-foreground">Cities Integrated</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </>

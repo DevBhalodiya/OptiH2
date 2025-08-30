@@ -36,7 +36,13 @@ const storageIcon = createCustomIcon('#8b5cf6') // Purple
 const demandIcon = createCustomIcon('#f97316') // Orange
 const renewableIcon = createCustomIcon('#10b981') // Emerald
 
-export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
+export function LeafletMap({ 
+  showZones = false, 
+  selectedStates = [] 
+}: { 
+  showZones?: boolean
+  selectedStates?: string[]
+}) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
   const markersRef = useRef<L.Marker[]>([])
@@ -55,33 +61,25 @@ export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
   useEffect(() => {
     if (!mapContainerRef.current) return
 
-    console.log('Initializing map...')
-
     // Create map instance only if it doesn't exist
     if (!mapRef.current) {
       mapRef.current = L.map(mapContainerRef.current, {
         center: [23.5937, 78.9629], // Center of India
         zoom: 5,
         scrollWheelZoom: true,
-        minZoom: 3,
-        maxZoom: 12
+        minZoom: 4, // Prevent zooming out too far
+        maxZoom: 12,
+        maxBounds: [
+          [5.0, 65.0], // Southwest bounds of India
+          [38.0, 100.0]  // Northeast bounds of India
+        ],
+        maxBoundsViscosity: 1.0 // Strict bounds - cannot pan outside India
       })
 
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
+        attribution: '',
       }).addTo(mapRef.current)
-
-      console.log('Map initialized successfully')
-      
-      // Add a test marker to verify map is working
-      const testMarker = L.marker([23.5937, 78.9629])
-        .bindPopup('Test: Map is working!')
-        .addTo(mapRef.current)
-      
-      setTimeout(() => {
-        testMarker.remove()
-      }, 3000)
     }
 
     // Cleanup function
@@ -107,15 +105,6 @@ export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
   useEffect(() => {
     if (!mapRef.current) return
 
-    console.log('Updating layers:', layers)
-    console.log('Sample data:', { 
-      plants: samplePlants.length, 
-      pipelines: samplePipelines.length, 
-      storage: sampleStorageSites.length, 
-      demand: sampleDemandHubs.length, 
-      renewables: sampleRenewables.length 
-    })
-
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove())
     polylinesRef.current.forEach(polyline => polyline.remove())
@@ -125,17 +114,22 @@ export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
     polylinesRef.current = []
     circlesRef.current = []
 
+    // Helper function to filter by selected states
+    const filterByState = (item: any) => {
+      if (selectedStates.length === 0) return true
+      return selectedStates.includes(item.state)
+    }
+
     // Add plants
     if (layers.plants) {
-      console.log('Adding plants:', samplePlants)
-      samplePlants.forEach((plant) => {
-        console.log('Adding plant marker:', plant.name, plant.lat, plant.lng)
+      samplePlants.filter(filterByState).forEach((plant) => {
         const marker = L.marker([plant.lat, plant.lng], { icon: plantIcon })
           .bindPopup(`
             <div>
               <div style="font-weight: 600">${plant.name}</div>
               <div>Status: ${plant.status}</div>
               <div>Capacity: ${plant.capacityMW} MW</div>
+              <div>State: ${plant.state}</div>
               ${plant.nearbyRenewables ? `<div>Nearby: ${plant.nearbyRenewables}</div>` : ''}
             </div>
           `)
@@ -159,12 +153,13 @@ export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
 
     // Add storage sites
     if (layers.storage) {
-      sampleStorageSites.forEach((site) => {
+      sampleStorageSites.filter(filterByState).forEach((site) => {
         const marker = L.marker([site.lat, site.lng], { icon: storageIcon })
           .bindPopup(`
             <div>
               <div style="font-weight: 600">${site.name}</div>
               <div>Capacity: ${site.capacityKtons} kT</div>
+              <div>State: ${site.state}</div>
             </div>
           `)
           .addTo(mapRef.current!)
@@ -174,12 +169,13 @@ export function LeafletMap({ showZones = false }: { showZones?: boolean }) {
 
     // Add demand hubs
     if (layers.demand) {
-      sampleDemandHubs.forEach((hub) => {
+      sampleDemandHubs.filter(filterByState).forEach((hub) => {
         const marker = L.marker([hub.lat, hub.lng], { icon: demandIcon })
           .bindPopup(`
             <div>
               <div style="font-weight: 600">${hub.name}</div>
               <div>Type: ${hub.type}</div>
+              <div>State: ${hub.state}</div>
             </div>
           `)
           .addTo(mapRef.current!)

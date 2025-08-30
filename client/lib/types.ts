@@ -41,6 +41,7 @@ export interface RenewableSite {
   lat: number
   lng: number
   type: "Wind" | "Solar"
+  state: string
 }
 
 export interface StatsSummary {

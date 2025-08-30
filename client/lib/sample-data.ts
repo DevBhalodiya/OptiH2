@@ -75,23 +75,29 @@ export const samplePipelines: Pipeline[] = [
 ]
 
 export const sampleStorageSites: StorageSite[] = [
-  { id: "s1", name: "Mumbai Storage Hub", lat: 19.0760, lng: 72.8777, capacityKtons: 120 },
-  { id: "s2", name: "Delhi Storage Center", lat: 28.7041, lng: 77.1025, capacityKtons: 80 },
-  { id: "s3", name: "Kolkata Storage Facility", lat: 22.5726, lng: 88.3639, capacityKtons: 95 },
+  { id: "s1", name: "Mumbai Storage Hub", lat: 19.0760, lng: 72.8777, capacityKtons: 120, state: "Maharashtra" },
+  { id: "s2", name: "Delhi Storage Center", lat: 28.7041, lng: 77.1025, capacityKtons: 80, state: "Delhi" },
+  { id: "s3", name: "Kolkata Storage Facility", lat: 22.5726, lng: 88.3639, capacityKtons: 95, state: "West Bengal" },
+  { id: "s4", name: "Chennai Storage Hub", lat: 13.0827, lng: 80.2707, capacityKtons: 85, state: "Tamil Nadu" },
+  { id: "s5", name: "Bangalore Storage Center", lat: 12.9716, lng: 77.5946, capacityKtons: 75, state: "Karnataka" },
 ]
 
 export const sampleDemandHubs: DemandHub[] = [
-  { id: "d1", name: "Mumbai Industrial Hub", lat: 19.0760, lng: 72.8777, type: "Industry" },
-  { id: "d2", name: "Delhi Urban Center", lat: 28.7041, lng: 77.1025, type: "Urban" },
-  { id: "d3", name: "Bangalore Tech Hub", lat: 12.9716, lng: 77.5946, type: "Industry" },
-  { id: "d4", name: "Chennai Port Hub", lat: 13.0827, lng: 80.2707, type: "Port" },
+  { id: "d1", name: "Mumbai Industrial Hub", lat: 19.0760, lng: 72.8777, type: "Industry", state: "Maharashtra" },
+  { id: "d2", name: "Delhi Urban Center", lat: 28.7041, lng: 77.1025, type: "Urban", state: "Delhi" },
+  { id: "d3", name: "Bangalore Tech Hub", lat: 12.9716, lng: 77.5946, type: "Industry", state: "Karnataka" },
+  { id: "d4", name: "Chennai Port Hub", lat: 13.0827, lng: 80.2707, type: "Port", state: "Tamil Nadu" },
+  { id: "d5", name: "Ahmedabad Industrial Zone", lat: 23.0225, lng: 72.5714, type: "Industry", state: "Gujarat" },
+  { id: "d6", name: "Jaipur Urban Center", lat: 26.9124, lng: 75.7873, type: "Urban", state: "Rajasthan" },
 ]
 
 export const sampleRenewables: RenewableSite[] = [
-  { id: "r1", name: "Gujarat Solar Park", lat: 23.0, lng: 72.0, type: "Solar" },
-  { id: "r2", name: "Rajasthan Wind Farm", lat: 26.5, lng: 70.5, type: "Wind" },
-  { id: "r3", name: "Tamil Nadu Solar Farm", lat: 12.5, lng: 80.0, type: "Solar" },
-  { id: "r4", name: "Karnataka Wind Project", lat: 13.5, lng: 77.5, type: "Wind" },
+  { id: "r1", name: "Gujarat Solar Park", lat: 23.0, lng: 72.0, type: "Solar", state: "Gujarat" },
+  { id: "r2", name: "Rajasthan Wind Farm", lat: 26.5, lng: 70.5, type: "Wind", state: "Rajasthan" },
+  { id: "r3", name: "Tamil Nadu Solar Farm", lat: 12.5, lng: 80.0, type: "Solar", state: "Tamil Nadu" },
+  { id: "r4", name: "Karnataka Wind Project", lat: 13.5, lng: 77.5, type: "Wind", state: "Karnataka" },
+  { id: "r5", name: "Maharashtra Solar Plant", lat: 19.5, lng: 72.5, type: "Solar", state: "Maharashtra" },
+  { id: "r6", name: "Delhi Wind Farm", lat: 28.5, lng: 77.5, type: "Wind", state: "Delhi" },
 ]
 
 export const sampleStats: StatsSummary = {

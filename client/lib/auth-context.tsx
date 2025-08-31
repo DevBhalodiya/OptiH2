@@ -5,8 +5,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 // Demo user data
 export const demoUser = {
   id: '1',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
+  name: 'Chirag Marvaniya',
+  email: 'chirag.marvaniya@optih2.com',
   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
   role: 'Energy Analyst',
   company: 'OptiH2 Solutions',
@@ -43,8 +43,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedUser = localStorage.getItem('optih2_user');
     if (savedUser) {
       const userData = JSON.parse(savedUser);
+      console.log('Loading cached user:', userData);
       setUser(userData);
       setIsAuthenticated(true);
+    } else {
+      console.log('No cached user found, using demo user:', demoUser);
     }
   }, []);
 
@@ -52,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Demo login - accept any email/password combination
     if (email && password) {
       const userData = { ...demoUser, email };
+      console.log('Logging in with user data:', userData);
       setUser(userData);
       setIsAuthenticated(true);
       localStorage.setItem('optih2_user', JSON.stringify(userData));

@@ -108,11 +108,11 @@ export function useMapData(
   // Convert real data to map format
   const convertRealDataToMapFormat = useCallback((realData: any): MapData => {
     const convertedData: MapData = {
-    plants: [],
-    pipelines: [],
-    renewables: [],
-    demandCenters: []
-    }
+        plants: [],
+        pipelines: [],
+        renewables: [],
+        demandCenters: []
+      }
 
     // Convert plants
     if (realData.plants) {

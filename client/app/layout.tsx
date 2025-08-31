@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/lib/auth-context'
+import { Chatbot } from '@/components/chatbot'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -81,6 +82,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             {children}
+            <Chatbot />
           </AuthProvider>
         </ThemeProvider>
         <Analytics />

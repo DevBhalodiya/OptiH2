@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info, LogIn, UserPlus, User } from "lucide-react"
+import { Leaf, Home, MapPin, Zap, LayoutDashboard, FileText, Info, LogIn, UserPlus, User, BarChart3 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { UserDropdown } from "./user-dropdown"
 
@@ -11,6 +11,7 @@ const links = [
   { href: "/", label: "Home", icon: Home },
   { href: "/map", label: "Map", icon: MapPin },
   { href: "/optimize", label: "Optimize", icon: Zap },
+  { href: "/predictive-analytics", label: "Analytics", icon: BarChart3 },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/reports", label: "Reports", icon: FileText },
   { href: "/about", label: "About", icon: Info },

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
+import { authApi } from '@/lib/auth-api';
 import { Navbar } from '@/components/navbar';
 import { EarthBackground } from '@/components/earth-background';
 import { User, Mail, Building, Briefcase, Calendar, Save, Edit, ArrowLeft } from 'lucide-react';
@@ -74,11 +75,18 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (validateForm()) {
       setIsLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setIsLoading(false);
-      setIsEditing(false);
-      // In a real app, you would update the user data here
+      try {
+        const { user: updatedUser } = await authApi.updateProfile(formData);
+        // Update the user context with the new data
+        // You might need to add an updateUser method to your auth context
+        setIsEditing(false);
+      } catch (error) {
+        setErrors({
+          general: error instanceof Error ? error.message : 'Failed to update profile'
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
